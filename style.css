@@ -31,6 +31,170 @@
   --font-label: 500 0.9rem/1.4 var(--font-family);    /* buttons, labels */
   --font-body: 400 1rem/1.6 var(--font-family);       /* normal text */
 }
+[data-theme="blue"] {
+  --primary: #4a90e2;
+  --on-primary: #ffffff;
+  --secondary: #356ab0;
+  --secondary-container: #d0e4ff;
+  --on-secondary-container: #0b1e33;
+}
+
+[data-theme="light-blue"] {
+  --primary: #03a9f4;
+  --on-primary: #ffffff;
+  --secondary: #0277bd;
+  --secondary-container: #b3e5fc;
+  --on-secondary-container: #001f33;
+}
+
+[data-theme="cyan"] {
+  --primary: #00bcd4;
+  --on-primary: #ffffff;
+  --secondary: #008ba3;
+  --secondary-container: #b2ebf2;
+  --on-secondary-container: #002021;
+}
+
+[data-theme="teal"] {
+  --primary: #009688;
+  --on-primary: #ffffff;
+  --secondary: #00675b;
+  --secondary-container: #b2dfdb;
+  --on-secondary-container: #00201a;
+}
+
+[data-theme="green"] {
+  --primary: #4caf50;
+  --on-primary: #ffffff;
+  --secondary: #357a38;
+  --secondary-container: #c8f5c4;
+  --on-secondary-container: #0a1e0b;
+}
+
+[data-theme="light-green"] {
+  --primary: #8bc34a;
+  --on-primary: #000000;
+  --secondary: #5a9216;
+  --secondary-container: #dcedc8;
+  --on-secondary-container: #1a2900;
+}
+
+[data-theme="lime"] {
+  --primary: #cddc39;
+  --on-primary: #000000;
+  --secondary: #9aa21b;
+  --secondary-container: #f0f4c3;
+  --on-secondary-container: #222900;
+}
+
+[data-theme="amber"] {
+  --primary: #ffc107;
+  --on-primary: #000000;
+  --secondary: #b28704;
+  --secondary-container: #ffecb3;
+  --on-secondary-container: #332900;
+}
+
+[data-theme="orange"] {
+  --primary: #ff9800;
+  --on-primary: #ffffff;
+  --secondary: #b26a00;
+  --secondary-container: #ffe0b2;
+  --on-secondary-container: #331a00;
+}
+
+[data-theme="deep-orange"] {
+  --primary: #ff5722;
+  --on-primary: #ffffff;
+  --secondary: #b23c17;
+  --secondary-container: #ffccbc;
+  --on-secondary-container: #330b00;
+}
+
+[data-theme="red-orange"] {
+  --primary: #ff7043;
+  --on-primary: #ffffff;
+  --secondary: #b23c17;
+  --secondary-container: #ffccb8;
+  --on-secondary-container: #330a00;
+}
+
+[data-theme="red"] {
+  --primary: #ff5252;
+  --on-primary: #ffffff;
+  --secondary: #b03a3a;
+  --secondary-container: #ffd7d7;
+  --on-secondary-container: #330101;
+}
+
+[data-theme="pink"] {
+  --primary: #e91e63;
+  --on-primary: #ffffff;
+  --secondary: #b0003a;
+  --secondary-container: #ffcad4;
+  --on-secondary-container: #33000b;
+}
+
+[data-theme="pink-lavender"] {
+  --primary: #e040fb;
+  --on-primary: #ffffff;
+  --secondary: #9c27b0;
+  --secondary-container: #f3c4ff;
+  --on-secondary-container: #2b0033;
+}
+
+[data-theme="purple"] {
+  --primary: #9c27b0;
+  --on-primary: #ffffff;
+  --secondary: #6a1b9a;
+  --secondary-container: #e8c4f2;
+  --on-secondary-container: #2b0030;
+}
+
+[data-theme="purple-gray"] {
+  --primary: #7e57c2;
+  --on-primary: #ffffff;
+  --secondary: #5e35b1;
+  --secondary-container: #e0c7f9;
+  --on-secondary-container: #210051;
+}
+
+[data-theme="indigo"] {
+  --primary: #3f51b5;
+  --on-primary: #ffffff;
+  --secondary: #2c387e;
+  --secondary-container: #c5cae9;
+  --on-secondary-container: #0a0f33;
+}
+
+[data-theme="blue-gray"] {
+  --primary: #607d8b;
+  --on-primary: #ffffff;
+  --secondary: #455a64;
+  --secondary-container: #cfd8dc;
+  --on-secondary-container: #0a1b21;
+}
+
+[data-theme="brown"] {
+  --primary: #795548;
+  --on-primary: #ffffff;
+  --secondary: #5d4037;
+  --secondary-container: #d7ccc8;
+  --on-secondary-container: #1b0c05;
+}
+
+[data-theme="gray"] {
+  --primary: #9e9e9e;
+  --on-primary: #000000;
+  --secondary: #707070;
+  --secondary-container: #e0e0e0;
+  --on-secondary-container: #1a1a1a;
+}
+
+
+
+
+
 
 body {
     font: var(--font-body);
@@ -163,7 +327,7 @@ header {
   gap: 0.5rem;
   padding: 1rem 0.5rem;
   background-color: var(--secondary-container);
-  color: var(--on-secondary-container);
+  color: var(--on-secondary-container); 
   border-radius: 1.5rem;
   text-decoration: none;
   font-weight: 500;
@@ -347,8 +511,11 @@ header {
   inset: 0;
   z-index: -1;
   overflow: hidden;
-  background: linear-gradient(135deg, #1c1b1f, #2a0a0a 50%, #1c1b1f);
+  background: #300000; /* neutral gray fallback */
+  transition: background 1s ease; /* smooth theme changes */
 }
+
+
 
 .orb {
   position: absolute;
@@ -435,4 +602,232 @@ header {
 
 .search-form button:active {
   transform: scale(0.95);
+}
+/* Settings slide-out */
+/* Settings Panel */
+.settings-panel {
+  position: fixed;
+  top: 0;
+  right: -400px; /* hidden initially */
+  width: 360px;
+  height: 100%;
+  background: var(--surface-container);
+  color: var(--on-surface);
+  box-shadow: -4px 0 20px rgba(0,0,0,0.5);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  transition: right 0.35s ease;
+  z-index: 1000;
+  border-radius: 1rem 0 0 1rem;
+}
+
+.settings-panel.active {
+  right: 0; /* slide in */
+}
+
+/* Settings Header */
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.settings-header h2 {
+  font: var(--font-headline);
+  margin: 0;
+}
+
+/* Sections */
+.settings-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-section label {
+  font: var(--font-label);
+  color: var(--on-surface-variant);
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Color Swatches */
+.color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.swatch {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--outline);
+  background: var(--swatch);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.swatch:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.swatch:active {
+  transform: scale(1.05);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+/* Background Upload Controls */
+.background-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+#bg-upload {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid var(--outline);
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  cursor: pointer;
+  font: var(--font-label);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#bg-upload:hover {
+  background: var(--surface-container-high);
+}
+
+/* Custom file upload button */
+.custom-file-upload {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  font: var(--font-label);
+  border-radius: 1rem;
+  cursor: pointer;
+  border: 1px solid var(--outline);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.custom-file-upload:hover {
+  background: var(--surface-container-high);
+}
+
+.custom-file-upload input[type="file"] {
+  display: none;
+}
+
+/* Background file name */
+#bg-name {
+  margin-top: 0.5rem;
+  font: var(--font-body);
+  color: var(--on-surface-variant);
+  word-break: break-word;
+}
+
+/* Remove button under filename */
+#remove-bg {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  background: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  cursor: pointer;
+  font: var(--font-label);
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+#remove-bg:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+#remove-bg:active {
+  transform: translateY(0) scale(0.95);
+}
+
+
+/* Optional: Scroll if content overflows */
+.settings-panel {
+  overflow-y: auto;
+}
+
+/* Subtle divider between sections */
+.settings-section + .settings-section {
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 1.5rem;
+}
+
+/* Make swatches feel tactile like Pixel UI */
+.swatch {
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Scrollbar for panel (Pixel-style) */
+.settings-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.settings-panel::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+}
+
+.settings-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+  /* M3-style settings button */
+#m3-settings-btn,
+#m3-settings-btn span,
+.m3-icon-button {
+  /* Base button */
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+
+  /* Elevation / shadow */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.15);
+
+  transition: box-shadow 0.2s ease, transform 0.15s ease, background 0.2s ease;
+}
+
+/* Hover state */
+.m3-icon-button:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25), 0 8px 16px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+  background: var(--secondary-container);
+}
+
+/* Press / active state */
+.m3-icon-button:active {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transform: scale(0.95);
+}
+
+/* Icon scaling on press */
+.m3-icon-button span.material-icons-round {
+  font-size: 28px;
+  user-select: none;
+  pointer-events: none;
+  transition: transform 0.15s ease;
+}
+
+.m3-icon-button:active span.material-icons-round {
+  transform: scale(0.85);
 }

@@ -10,11 +10,7 @@
 
 </head>
 <body>
-  <div class="background-container">
-    <div class="orb orb1"></div>
-    <div class="orb orb2"></div>
-    <div class="orb orb3"></div>
-  </div>
+  
 
   <header>
     <h2 id="greeting">Hello</h2>
@@ -93,6 +89,60 @@
     </button>
   </form>
 </div>
+<!-- Settings Button -->
+<button id="open-settings" class="m3-icon-button" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+  <span class="material-icons-round">settings</span>
+</button>
+
+<!-- Settings Side Panel -->
+<div id="settings-panel" class="settings-panel">
+  <div class="settings-header">
+    <h3>Settings</h3>
+    <button id="close-settings" class="m3-icon-button">
+      <span class="material-icons-round">close</span>
+    </button>
+  </div>
+
+<div class="settings-section">
+  <label>Color Scheme</label>
+  <div class="color-swatches">
+    <button class="swatch" data-theme="blue" style="--swatch:#4a90e2"></button>
+    <button class="swatch" data-theme="light-blue" style="--swatch:#03a9f4"></button>
+    <button class="swatch" data-theme="cyan" style="--swatch:#00bcd4"></button>
+    <button class="swatch" data-theme="teal" style="--swatch:#009688"></button>
+    <button class="swatch" data-theme="green" style="--swatch:#4caf50"></button>
+    <button class="swatch" data-theme="light-green" style="--swatch:#8bc34a"></button>
+    <button class="swatch" data-theme="lime" style="--swatch:#cddc39"></button>
+    <button class="swatch" data-theme="amber" style="--swatch:#ffc107"></button>
+    <button class="swatch" data-theme="orange" style="--swatch:#ff9800"></button>
+    <button class="swatch" data-theme="deep-orange" style="--swatch:#ff5722"></button>
+    <button class="swatch" data-theme="red-orange" style="--swatch:#ff7043"></button>
+    <button class="swatch" data-theme="red" style="--swatch:#ff5252"></button>
+    <button class="swatch" data-theme="pink" style="--swatch:#e91e63"></button>
+    <button class="swatch" data-theme="pink-lavender" style="--swatch:#e040fb"></button>
+    <button class="swatch" data-theme="purple" style="--swatch:#9c27b0"></button>
+    <button class="swatch" data-theme="purple-gray" style="--swatch:#7e57c2"></button>
+    <button class="swatch" data-theme="indigo" style="--swatch:#3f51b5"></button>
+    <button class="swatch" data-theme="blue-gray" style="--swatch:#607d8b"></button>
+    <button class="swatch" data-theme="brown" style="--swatch:#795548"></button>
+    <button class="swatch" data-theme="gray" style="--swatch:#9e9e9e"></button>
+  </div>
+</div>
+
+<div class="settings-section">
+  <label>Background Image</label>
+  <div class="background-controls">
+    <label class="custom-file-upload">
+      Choose File
+      <input type="file" id="bg-upload" accept="image/*">
+    </label>
+  </div>
+  <div id="bg-name"></div>
+  <button id="remove-bg">Remove Background</button>
+</div>
+
+</div>
+
 
   <script src="script.js"></script>
 </body>

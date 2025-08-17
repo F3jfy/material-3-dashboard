@@ -151,42 +151,94 @@ document.getElementById("add-todo").onclick = () => {
 
 // Initial render
 renderTodos();
+  // Overlay toggle
+// --- Settings Panel Toggle ---
+const openSettingsBtn = document.getElementById('open-settings');
+const closeSettingsBtn = document.getElementById('close-settings');
+const settingsPanel = document.getElementById('settings-panel');
+
+openSettingsBtn.addEventListener('click', () => {
+  settingsPanel.classList.add('active');
+});
+
+closeSettingsBtn.addEventListener('click', () => {
+  settingsPanel.classList.remove('active');
+});
 
 
- const orbCount = 5; // how many orbs you want
-  const container = document.querySelector('.background-container');
+// --- Theme Swatches ---
+document.querySelectorAll(".swatch").forEach(swatch => {
+  swatch.addEventListener("click", () => {
+    const theme = swatch.dataset.theme;
 
-  // red-themed palette
-  const colors = [
-    '#ff1744', // vivid red
-    '#d50000', // deep red
-    '#ff5252', // soft red
-    '#ff8a80', // light warm red
-    '#ff7043'  // orange-red accent
-  ];
+    if (theme === 'default') {
+      document.documentElement.removeAttribute('data-theme');
+      createOrbs('default');
+      container.style.background = '#1c1b1f';
+    } else {
+      document.documentElement.setAttribute('data-theme', theme);
+      createOrbs(theme);
 
-  for (let i = 0; i < orbCount; i++) {
-    const orb = document.createElement('div');
-    orb.classList.add('orb');
+      if(theme === 'purple') container.style.background = '#2c1a3f';
+      if(theme === 'blue')   container.style.background = '#0b1e33';
+      if(theme === 'green')  container.style.background = '#0d250e';
+    }
+  });
+});
+// --- Background Uploader with localStorage ---
+const bgUpload = document.getElementById("bg-upload");
+const removeBg = document.getElementById("remove-bg");
 
-    // random size
-    const size = Math.floor(Math.random() * 200) + 200; // 200–400px
-    orb.style.width = `${size}px`;
-    orb.style.height = `${size}px`;
-
-    // random position
-    orb.style.top = `${Math.random() * 80}%`;
-    orb.style.left = `${Math.random() * 80}%`;
-
-    // random red tone
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    orb.style.background = `radial-gradient(circle at 30% 30%, ${color}, transparent 70%)`;
-
-    // random animation speed & delay
-    const duration = Math.random() * 20 + 30; // 30–50s
-    const delay = Math.random() * -20;
-    orb.style.animationDuration = `${duration}s`;
-    orb.style.animationDelay = `${delay}s`;
-
-    container.appendChild(orb);
+// Load saved background if it exists
+window.addEventListener("DOMContentLoaded", () => {
+  const savedBg = localStorage.getItem("customBackground");
+  if (savedBg) {
+    document.body.style.backgroundImage = `url(${savedBg})`;
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
   }
+
+  const savedTheme = localStorage.getItem("colorTheme");
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  }
+});
+
+bgUpload.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const bgData = ev.target.result;
+
+      // apply
+      document.body.style.backgroundImage = `url(${bgData})`;
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundPosition = "center";
+
+      // save
+      localStorage.setItem("customBackground", bgData);
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+removeBg.addEventListener("click", () => {
+  document.body.style.backgroundImage = "";
+  localStorage.removeItem("customBackground");
+});
+
+// --- Theme Color Picker with localStorage ---
+const swatches = document.querySelectorAll(".swatch");
+
+swatches.forEach((swatch) => {
+  swatch.addEventListener("click", () => {
+    const theme = swatch.dataset.theme;
+    applyTheme(theme);
+    localStorage.setItem("colorTheme", theme);
+  });
+});
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+}
