@@ -133,13 +133,25 @@ header {
   margin-bottom: 1rem;
 }
 
-
-/* Shortcuts Card */
 .shortcuts {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 1rem;
 }
+
+.shortcut-icon {
+  width: 32px;   /* adjust size for all logos */
+  height: 32px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.m3-button:hover .shortcut-icon {
+  transform: scale(1.15);     /* subtle pop */
+  filter: brightness(1.2);     /* slight glow effect */
+}
+
 
 /* M3 Filled Tonal Button Style */
 /* M3 Filled Tonal Button Style */
