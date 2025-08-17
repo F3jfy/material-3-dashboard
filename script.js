@@ -151,3 +151,42 @@ document.getElementById("add-todo").onclick = () => {
 
 // Initial render
 renderTodos();
+
+
+ const orbCount = 5; // how many orbs you want
+  const container = document.querySelector('.background-container');
+
+  // red-themed palette
+  const colors = [
+    '#ff1744', // vivid red
+    '#d50000', // deep red
+    '#ff5252', // soft red
+    '#ff8a80', // light warm red
+    '#ff7043'  // orange-red accent
+  ];
+
+  for (let i = 0; i < orbCount; i++) {
+    const orb = document.createElement('div');
+    orb.classList.add('orb');
+
+    // random size
+    const size = Math.floor(Math.random() * 200) + 200; // 200–400px
+    orb.style.width = `${size}px`;
+    orb.style.height = `${size}px`;
+
+    // random position
+    orb.style.top = `${Math.random() * 80}%`;
+    orb.style.left = `${Math.random() * 80}%`;
+
+    // random red tone
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    orb.style.background = `radial-gradient(circle at 30% 30%, ${color}, transparent 70%)`;
+
+    // random animation speed & delay
+    const duration = Math.random() * 20 + 30; // 30–50s
+    const delay = Math.random() * -20;
+    orb.style.animationDuration = `${duration}s`;
+    orb.style.animationDelay = `${delay}s`;
+
+    container.appendChild(orb);
+  }

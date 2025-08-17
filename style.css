@@ -24,10 +24,18 @@
   --outline: #9c8f8d;
   --outline-variant: #534341;
   
-  font-family: 'Roboto', 'Segoe UI', sans-serif;
+  --font-family: 'Roboto Flex', 'Segoe UI', system-ui, sans-serif;
+    --font-display: 700 2.75rem/1.2 var(--font-family); /* big titles */
+  --font-headline: 600 2rem/1.3 var(--font-family);   /* section headings */
+  --font-title: 500 1.25rem/1.4 var(--font-family);   /* card titles */
+  --font-label: 500 0.9rem/1.4 var(--font-family);    /* buttons, labels */
+  --font-body: 400 1rem/1.6 var(--font-family);       /* normal text */
 }
 
 body {
+    font: var(--font-body);
+  color: var(--on-surface);
+  background: var(--surface);
   margin: 0;
   color: var(--on-surface);
   background-color: var(--surface-dim); /* Use a solid M3 surface color */
@@ -40,7 +48,26 @@ body {
   padding: 2rem;
   box-sizing: border-box;
 }
+h1 {
+  font: var(--font-display);
+  letter-spacing: -0.02em;
+}
 
+h2 {
+  font: var(--font-headline);
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font: var(--font-title);
+}
+
+/* Labels (buttons, form text) */
+button, label {
+  font: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
 /* Header stays centered at the top */
 header {
   text-align: center;
@@ -67,42 +94,45 @@ header {
   width: 100%;
   max-width: 1200px;
 }
-.card {
-  /* We use RGBA values of our surface color for transparency */
-  /* --surface-container is #211e1d or rgb(33, 30, 29) */
-  background: rgba(33, 30, 29, 0.7);
-  backdrop-filter: blur(12px); /* This creates the glass effect */
-  -webkit-backdrop-filter: blur(12px); /* For Safari support */
+  .card {
+  background: rgba(33, 30, 29, 0.65); /* slightly softer transparency */
+  backdrop-filter: blur(16px); 
+  -webkit-backdrop-filter: blur(16px);
   
-  border-radius: 1rem;
-  padding: 1.5rem;
-  border: 1px solid var(--outline-variant);
-  transition: background-color 0.3s ease;
+  border-radius: 1.25rem; /* smoother corners */
+  padding: 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.05); /* softer border */
   
-  opacity: 0; /* Keep the entry animation */
+  /* Subtle shadow for elevation */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+
+  opacity: 0;
   animation: card-enter 0.6s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
 }
 
-/* Stagger the animation for each card */
-.grid-container .card:nth-child(1) {
-  animation-delay: 0.1s;
-}
-.grid-container .card:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.grid-container .card:nth-child(3) {
-  animation-delay: 0.3s;
-}
+/* Stagger entry */
+.grid-container .card:nth-child(1) { animation-delay: 0.1s; }
+.grid-container .card:nth-child(2) { animation-delay: 0.2s; }
+.grid-container .card:nth-child(3) { animation-delay: 0.3s; }
 
 .card:hover {
-  background-color: var(--surface-container-high);
+  background: rgba(33, 30, 29, 0.8);
+  transform: translateY(-6px); /* more lift */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
+/* Card titles */
 .card h3 {
   margin-top: 0;
-  font-size: 1.25rem; /* M3 Title Medium */
-  font-weight: 500;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
 }
+
 
 /* Shortcuts Card */
 .shortcuts {
@@ -302,69 +332,95 @@ header {
 
 .background-container {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1; /* Place it behind all other content */
-  overflow: hidden; /* Hide the parts of orbs that go off-screen */
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1c1b1f, #2a0a0a 50%, #1c1b1f);
 }
 
 .orb {
   position: absolute;
   border-radius: 50%;
-  /* The blur and opacity create the soft, glowing effect */
-  filter: blur(80px);
-  opacity: 0.6;
-  animation: move-orb 30s ease-in-out infinite;
+  filter: blur(100px);
+  opacity: 0.55;
+  animation: move-orb ease-in-out infinite;
+  mix-blend-mode: screen;
 }
 
-/* Define each orb's unique properties */
-.orb1 {
-  width: 400px;
-  height: 400px;
-  background-color: var(--primary);
-  top: 10%;
-  left: 10%;
-  animation-duration: 40s; /* Slower */
-  animation-delay: 0s;
-}
-
-.orb2 {
-  width: 300px;
-  height: 300px;
-  background-color: var(--secondary);
-  bottom: 20%;
-  right: 15%;
-  animation-duration: 35s; /* Medium */
-  animation-delay: -10s; /* Start at a different point in the animation */
-}
-
-.orb3 {
-  width: 250px;
-  height: 250px;
-  background-color: #ff8a65; /* A complementary color */
-  bottom: 50%;
-  right: 40%;
-  animation-duration: 50s; /* Fastest */
-  animation-delay: -20s;
-}
-
-/* The animation keyframes define the orb's looping path */
 @keyframes move-orb {
-  0% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(-150px, 100px);
-  }
-  50% {
-    transform: translate(100px, -150px);
-  }
-  75% {
-    transform: translate(50px, 50px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-150px, 100px) scale(1.1); }
+  50% { transform: translate(100px, -150px) scale(0.9); }
+  75% { transform: translate(50px, 50px) scale(1.05); }
+}
+
+
+
+
+/* Full-width Search Card */
+.search-card {
+  margin-top: 1.5rem;
+  width: 100%;
+  max-width: 1200px; /* match grid-container */
+  background: rgba(33, 30, 29, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 2rem; /* smoother pill shape */
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--outline-variant);
+  animation: card-enter 0.6s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.search-form input {
+  flex-grow: 1;
+  background: transparent;
+  border: none;
+  color: var(--on-surface);
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  border-radius: 1rem; /* slight rounding for softer input look */
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.search-form input::placeholder {
+  color: var(--on-surface-variant);
+}
+
+.search-form input:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.search-form button {
+  background-color: var(--secondary-container);
+  color: var(--on-secondary-container);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.search-form button:hover {
+  background-color: var(--secondary-container);
+  filter: brightness(0.9);
+}
+
+.search-form button:active {
+  transform: scale(0.95);
 }
