@@ -918,18 +918,41 @@
 /* Edit mode affordances */
 .m3-button.editing {
   border: 2px dashed var(--primary);
-  cursor: move;
+  cursor: grab;
 }
-#edit-shortcuts.active { outline: 2px solid var(--primary); }
+
+.m3-button.editing:active {
+  cursor: grabbing; /* Cursor for when you're actively dragging */
+}
+#edit-shortcuts.active { 
+  outline: 2px solid var(--primary); 
+}
+
+.shortcuts .m3-button {
+  transition: transform 0.2s ease-in-out, 
+              box-shadow 0.2s ease-in-out,
+              opacity 0.2s ease-in-out; /* Animates movement, shadow, and opacity */
+  user-select: none; /* Prevents text selection while dragging */
+}
 
 /* Dragging ghost style */
-.m3-button.dragging { opacity: .5; }
+.m3-button.dragging {
+  opacity: 0.4;
+  transform: scale(1.08) rotate(2deg); /* "Lifts" the item off the page */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3); /* Adds a pronounced shadow */
+  cursor: grabbing;
+}
 
-/* Optional: placeholder gap while dragging */
+/* Placeholder for the drop location */
 .placeholder {
-  border: 2px dashed var(--outline);
+  height: 64px; /* Match the height of your shortcuts */
   border-radius: 1.5rem;
-  height: 64px;
+  background-color: rgba(128, 128, 128, 0.2); /* A subtle fill is better than a harsh border */
+  
+  /* Animate its appearance */
+  transition: all 0.2s ease;
+  flex-shrink: 0; /* Prevents the placeholder from shrinking in the flex layout */
+  margin: 4px 0; /* Adjust to match the margin of your shortcuts */
 }
 
 /* Modal */
@@ -1002,6 +1025,6 @@
 }
 
 #edit-shortcuts.active {
-  background: #ff4444; /* highlight when edit mode is ON */
+  background: #ffffffbb; /* highlight when edit mode is ON */
   opacity: 1;
 }
