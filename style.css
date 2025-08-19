@@ -462,36 +462,88 @@
   }
 
 
-  /* Weather Card */
-  .weather-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-  }
+/* --- NEW: Split Weather/BTC Card --- */
 
-  #weather-main {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-  }
+/* 1. The main card container */
+.weather-card {
+  /* Remove padding to let the inner sections control spacing */
+  padding: 0;
+  /* This is crucial: it keeps the children's sharp corners inside the parent's rounded ones */
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+}
 
-  #weather-main img {
-      width: 64px;
-      height: 64px;
-  }
+/* 2. The top weather section */
+#weather-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem; /* More spacious padding */ 
+  transition: background-color 0.25s ease;
+}
 
-  #temp {
-      font-size: 3rem; /* M3 Display Small */
-      font-weight: 500;
-  }
+/* 3. The bottom Bitcoin section */
+#btc-bottom {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem; /* Slightly less vertical padding for a single line of content */
+  transition: background-color 0.25s ease;
+}
 
-  #description {
-      text-transform: capitalize;
-      color: var(--on-surface-variant);
-      font-size: 1rem; /* M3 Title Small */
-  }
+
+/* 5. Typography and Icon Refinements */
+#weather-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+#weather-main img {
+  width: 64px;
+  height: 64px;
+}
+
+#temp {
+  font-size: 3.5rem; /* Slightly larger for more impact */
+  font-weight: 400;  /* M3 often uses lighter weights for large display text */
+  line-height: 1;    /* Tighten line height */
+}
+
+#description {
+  text-transform: capitalize;
+  color: var(--on-surface-variant);
+  font-size: 1rem;
+  margin-top: -0.25rem; /* Nudge it slightly closer to the temp */
+}
+
+.btc-row {
+  /* This class is no longer needed for layout, so we clear its styles */
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  /* We re-apply flex here so the simplified HTML works */
+  display: contents; 
+}
+
+.btc-icon { font-size: 28px; color: var(--primary); }
+.btc-meta { display: flex; flex-direction: column; min-width: 0; flex-grow: 1; }
+.btc-title { font-weight: 600; color: var(--on-surface); }
+.btc-sub { font-size: 0.8rem; color: var(--on-surface-variant); }
+
+.btc-right { display: flex; align-items: center; gap: 0.5rem; }
+.btc-price-value { font-size: 1.2rem; font-weight: 500; color: var(--on-surface); }
+
+.btc-chip {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+}
+.btc-chip.gain { background: rgba(0, 200, 83, 0.18); color: #00c853; }
+.btc-chip.loss { background: rgba(244, 67, 54, 0.18); color: #f44336; }
   /* Pixel-style entry animation */
   @keyframes card-enter {
     from {
@@ -1009,7 +1061,7 @@
   background: rgba(0, 0, 0, 0.3);
   color: white;
   font-size: 20px;
-  cursor: pointer;
+  cursor: pointer;  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1027,4 +1079,9 @@
 #edit-shortcuts.active {
   background: #ffffffbb; /* highlight when edit mode is ON */
   opacity: 1;
+}
+#weather-top,
+#btc-bottom {
+  /* This is the key property. It tells both sections to grow and share the empty space equally. */
+  flex-grow: 1;
 }

@@ -533,3 +533,107 @@ btnSave.addEventListener("click", e => {
   saveShortcuts();
   closeEditor();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+// === YOUR MOBULA API KEY HERE ===
+// tip: for local dev you can leave it empty, but for production put your real key
+const MOBULA_API_KEY = '099a2759-ede8-44f6-b195-9b8c0c251c2f'; // <-- replace with your key
+
+const BTC_CACHE_KEY  = 'btcPriceData_v1';
+const BTC_CACHE_TIME = 'btcPriceTime_v1';
+const CACHE_MS       = 30 * 60 * 1000; // 30 minutes
+
+async function fetchBtcPrice() {
+  const now = Date.now();
+  const cached = localStorage.getItem(BTC_CACHE_KEY);
+  const cachedTime = Number(localStorage.getItem(BTC_CACHE_TIME) || 0);
+
+  // serve from cache if fresh
+  if (cached && now - cachedTime < CACHE_MS) {
+    try { return JSON.parse(cached); } catch {}
+  }
+
+  // fetch live
+  const url = 'https://production-api.mobula.io/api/1/market/data?asset=Bitcoin';
+  const headers = { 'Content-Type': 'application/json' };
+  if (MOBULA_API_KEY && MOBULA_API_KEY !== 'YOUR_API_KEY_HERE') {
+    headers['Authorization'] = MOBULA_API_KEY; // per Mobula docs (no "Bearer")
+  }
+
+  try {
+    const res = await fetch(url, { headers });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+
+    // Mobula returns { data: {...} }
+    const d = json?.data || {};
+    const payload = {
+      price: Number(d.price),
+      change24h: Number(d.price_change_24h),
+      ts: now
+    };
+
+    // cache it
+    localStorage.setItem(BTC_CACHE_KEY, JSON.stringify(payload));
+    localStorage.setItem(BTC_CACHE_TIME, String(now));
+
+    return payload;
+  } catch (err) {
+    console.warn('Mobula fetch failed, using stale cache if any:', err);
+    if (cached) {
+      try { return JSON.parse(cached); } catch {}
+    }
+    // total failure fallback
+    return { price: NaN, change24h: NaN, ts: now };
+  }
+}
+
+function renderBtc({ price, change24h, ts }) {
+  const priceEl  = document.getElementById('btc-price');
+  const changeEl = document.getElementById('btc-change');
+  const updEl    = document.getElementById('btc-updated');
+
+  const fmt = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
+  priceEl.textContent = Number.isFinite(price) ? fmt.format(price) : 'N/A';
+
+  // change chip
+  const v = Number(change24h);
+  const sign = Number.isFinite(v) ? (v > 0 ? '+' : '') : '';
+  changeEl.textContent = Number.isFinite(v) ? `${sign}${v.toFixed(2)}%` : '—';
+  changeEl.classList.toggle('gain', Number.isFinite(v) && v > 0);
+  changeEl.classList.toggle('loss', Number.isFinite(v) && v < 0);
+
+  // updated text (+ whether it was cached)
+  const cachedTime = Number(localStorage.getItem(BTC_CACHE_TIME) || 0);
+  const age = Date.now() - cachedTime;
+  const isFresh = age < CACHE_MS;
+  const timeStr = new Date(ts || Date.now()).toLocaleTimeString();
+  updEl.textContent = isFresh ? `Updated ${timeStr}` : `Loaded (cached) ${timeStr}`;
+}
+
+async function loadBtc() {
+  const data = await fetchBtcPrice();
+  renderBtc(data);
+}
+
+// call on page load
+loadBtc();
+
+// optional: refresh when tab regains focus if cache expired
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    const cachedTime = Number(localStorage.getItem(BTC_CACHE_TIME) || 0);
+    if (Date.now() - cachedTime >= CACHE_MS) loadBtc();
+  }
+});

@@ -1,189 +1,209 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Home</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 
-</head>
-<body>
-  
+  </head>
+  <body>
+    
 
-  <header>
-    <h2 id="greeting">Hello</h2>
-    <div id="time"></div>
-  </header>
+    <header>
+      <h2 id="greeting">Hello</h2>
+      <div id="time"></div>
+    </header>
 
-  <div class="grid-container">
- <div class="card shortcuts-card">
-  <div class="shortcuts-header">
-    <h3>Shortcuts</h3>
-    <button id="edit-shortcuts" class="m3-icon-button" title="Edit shortcuts">
-      <span class="material-icons-round">edit</span>
-    </button>
-  </div>
-
-  <div class="shortcuts" id="shortcuts-list">
-    <!-- Make sure each <a> has: data-id, <img>, and <span class="shortcut-name"> -->
-    <a href="https://youtube.com" target="_blank" class="m3-button" data-id="youtube">
-      <img src="yt.svg" alt="YouTube" class="shortcut-icon"/>
-      <span class="shortcut-name">YouTube</span>
-    </a>
-
-    <a href="https://chat.openai.com" target="_blank" class="m3-button" data-id="chatgpt">
-      <img src="chat.svg" alt="ChatGPT" class="shortcut-icon"/>
-      <span class="shortcut-name">ChatGPT</span>
-    </a>
-
-    <a href="https://gemini.google.com" target="_blank" class="m3-button" data-id="gemini">
-      <img src="gemini.svg" alt="Gemini" class="shortcut-icon"/>
-      <span class="shortcut-name">Gemini</span>
-    </a>
-
-    <a href="https://instagram.com" target="_blank" class="m3-button" data-id="instagram">
-      <img src="instagram.svg" alt="Instagram" class="shortcut-icon"/>
-      <span class="shortcut-name">Instagram</span>
-    </a>
-
-    <a href="https://github.com" target="_blank" class="m3-button" data-id="github">
-      <img src="github.svg" alt="GitHub" class="shortcut-icon"/>
-      <span class="shortcut-name">GitHub</span>
-    </a>
-
-    <a href="https://dash.cloudflare.com" target="_blank" class="m3-button" data-id="cloudflare">
-      <img src="cloudflare.svg" alt="Cloudflare" class="shortcut-icon"/>
-      <span class="shortcut-name">Cloudflare</span>
-    </a>
-  </div>
-</div>
-
-<!-- Editor modal -->
-<div id="shortcut-editor" class="editor-modal hidden" aria-hidden="true">
-  <div class="editor-content" role="dialog" aria-modal="true" aria-labelledby="editor-title">
-    <h3 id="editor-title">Edit Shortcut</h3>
-
-    <label class="editor-row">
-      <span>Name</span>
-      <input id="edit-name" type="text" placeholder="My Site">
-    </label>
-
-    <label class="editor-row">
-      <span>Link</span>
-      <input id="edit-link" type="url" placeholder="https://example.com">
-    </label>
-
-    <div class="editor-row">
-      <span>Icon</span>
-      <div class="icon-edit">
-        <img id="edit-preview" class="shortcut-icon" alt="Icon preview" />
-        <label class="custom-file-upload">
-          Upload Icon
-          <input type="file" id="edit-file" accept="image/*">
-        </label>
-        <input id="edit-img-url" type="url" placeholder="or paste image URL">
-      </div>
+    <div class="grid-container">
+  <div class="card shortcuts-card">
+    <div class="shortcuts-header">
+      <h3>Shortcuts</h3>
+      <button id="edit-shortcuts" class="m3-icon-button" title="Edit shortcuts">
+        <span class="material-icons-round">edit</span>
+      </button>
     </div>
 
-    <div class="editor-actions">
-      <button id="editor-save" class="m3-icon-button"><span class="material-icons-round">check</span></button>
-      <button id="editor-cancel" class="m3-icon-button"><span class="material-icons-round">close</span></button>
+    <div class="shortcuts" id="shortcuts-list">
+      <!-- Make sure each <a> has: data-id, <img>, and <span class="shortcut-name"> -->
+      <a href="https://youtube.com" target="_blank" class="m3-button" data-id="youtube">
+        <img src="yt.svg" alt="YouTube" class="shortcut-icon"/>
+        <span class="shortcut-name">YouTube</span>
+      </a>
+
+      <a href="https://chat.openai.com" target="_blank" class="m3-button" data-id="chatgpt">
+        <img src="chat.svg" alt="ChatGPT" class="shortcut-icon"/>
+        <span class="shortcut-name">ChatGPT</span>
+      </a>
+
+      <a href="https://gemini.google.com" target="_blank" class="m3-button" data-id="gemini">
+        <img src="gemini.svg" alt="Gemini" class="shortcut-icon"/>
+        <span class="shortcut-name">Gemini</span>
+      </a>
+
+      <a href="https://instagram.com" target="_blank" class="m3-button" data-id="instagram">
+        <img src="instagram.svg" alt="Instagram" class="shortcut-icon"/>
+        <span class="shortcut-name">Instagram</span>
+      </a>
+
+      <a href="https://github.com" target="_blank" class="m3-button" data-id="github">
+        <img src="github.svg" alt="GitHub" class="shortcut-icon"/>
+        <span class="shortcut-name">GitHub</span>
+      </a>
+
+      <a href="https://dash.cloudflare.com" target="_blank" class="m3-button" data-id="cloudflare">
+        <img src="cloudflare.svg" alt="Cloudflare" class="shortcut-icon"/>
+        <span class="shortcut-name">Cloudflare</span>
+      </a>
     </div>
   </div>
-</div>
 
+  <!-- Editor modal -->
+  <div id="shortcut-editor" class="editor-modal hidden" aria-hidden="true">
+    <div class="editor-content" role="dialog" aria-modal="true" aria-labelledby="editor-title">
+      <h3 id="editor-title">Edit Shortcut</h3>
 
+      <label class="editor-row">
+        <span>Name</span>
+        <input id="edit-name" type="text" placeholder="My Site">
+      </label>
 
-    <div class="card todo-card">
-      <h3>To-Do List</h3>
-      <div class="todo-input">
-        <input type="text" id="todo-text" placeholder="Add a new task" />
-        <button id="add-todo" class="m3-icon-button">
-          <span class="material-icons-round">add</span>
-        </button>
-      </div>
-      <ul id="todo-list"></ul>
-    </div>
+      <label class="editor-row">
+        <span>Link</span>
+        <input id="edit-link" type="url" placeholder="https://example.com">
+      </label>
 
-    <div class="card weather-card">
-        <div id="weather-main">
-            <img id="weather-icon" src="" alt="weather icon" />
-            <div id="temp"></div>
+      <div class="editor-row">
+        <span>Icon</span>
+        <div class="icon-edit">
+          <img id="edit-preview" class="shortcut-icon" alt="Icon preview" />
+          <label class="custom-file-upload">
+            Upload Icon
+            <input type="file" id="edit-file" accept="image/*">
+          </label>
+          <input id="edit-img-url" type="url" placeholder="or paste image URL">
         </div>
-        <div id="description"></div>
+      </div>
+
+      <div class="editor-actions">
+        <button id="editor-save" class="m3-icon-button"><span class="material-icons-round">check</span></button>
+        <button id="editor-cancel" class="m3-icon-button"><span class="material-icons-round">close</span></button>
+      </div>
     </div>
   </div>
-<div class="search-card">
-  <form action="https://www.google.com/search" method="GET" target="_blank" class="search-form">
-    <input type="text" name="q" placeholder="Search Google..." required />
-    <button type="submit" class="m3-icon-button">
-      <span class="material-icons-round">search</span>
-    </button>
-  </form>
-</div>
-<!-- Settings Button -->
-<button id="open-settings" class="m3-icon-button" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
-  <span class="material-icons-round">settings</span>
-</button>
 
-<!-- Settings Side Panel -->
-<div id="settings-panel" class="settings-panel">
-  <div class="settings-header">
-    <h3>Settings</h3>
-    <button id="close-settings" class="m3-icon-button">
-      <span class="material-icons-round">close</span>
-    </button>
+
+
+      <div class="card todo-card">
+        <h3>To-Do List</h3>
+        <div class="todo-input">
+          <input type="text" id="todo-text" placeholder="Add a new task" />
+          <button id="add-todo" class="m3-icon-button">
+            <span class="material-icons-round">add</span>
+          </button>
+        </div>
+        <ul id="todo-list"></ul>
+      </div>
+  <div class="card weather-card">
+  <div id="weather-top">
+    <div id="weather-main">
+      <img id="weather-icon" src="http://openweathermap.org/img/wn/01d@2x.png" alt="weather icon" />
+      <div id="temp">25°</div>
+    </div>
+    <div id="description">clear sky</div>
   </div>
 
-<div class="settings-section">
-  <label>Color Scheme</label>
-  <div class="color-swatches">
-    <button class="swatch" data-theme="blue" style="--swatch:#4a90e2"></button>
-    <button class="swatch" data-theme="light-blue" style="--swatch:#03a9f4"></button>
-    <button class="swatch" data-theme="cyan" style="--swatch:#00bcd4"></button>
-    <button class="swatch" data-theme="teal" style="--swatch:#009688"></button>
-    <button class="swatch" data-theme="green" style="--swatch:#4caf50"></button>
-    <button class="swatch" data-theme="light-green" style="--swatch:#8bc34a"></button>
-    <button class="swatch" data-theme="lime" style="--swatch:#cddc39"></button>
-    <button class="swatch" data-theme="amber" style="--swatch:#ffc107"></button>
-    <button class="swatch" data-theme="orange" style="--swatch:#ff9800"></button>
-    <button class="swatch" data-theme="deep-orange" style="--swatch:#ff5722"></button>
-    <button class="swatch" data-theme="red-orange" style="--swatch:#ff7043"></button>
-    <button class="swatch" data-theme="red" style="--swatch:#ff5252"></button>
-    <button class="swatch" data-theme="pink" style="--swatch:#e91e63"></button>
-    <button class="swatch" data-theme="pink-lavender" style="--swatch:#e040fb"></button>
-    <button class="swatch" data-theme="purple" style="--swatch:#9c27b0"></button>
-    <button class="swatch" data-theme="purple-gray" style="--swatch:#7e57c2"></button>
-    <button class="swatch" data-theme="indigo" style="--swatch:#3f51b5"></button>
-    <button class="swatch" data-theme="blue-gray" style="--swatch:#607d8b"></button>
-    <button class="swatch" data-theme="brown" style="--swatch:#795548"></button>
-    <button class="swatch" data-theme="gray" style="--swatch:#9e9e9e"></button>
-  </div>
-</div>
+  <div id="btc-bottom">
+    <span class="material-icons-round btc-icon" aria-hidden="true">currency_bitcoin</span>
 
-<div class="settings-section">
-  <label>Background Image</label>
-  <div class="background-controls" id="bg-dropzone">
-    <label class="custom-file-upload">
-      Choose File
-      <input type="file" id="bg-upload" accept="image/*">
-    </label>
-    <div id="bg-preview" class="hidden">
-      <img id="bg-thumb" src="" alt="Preview">
-      <span id="bg-name"></span>
+    <div class="btc-meta">
+      <div class="btc-title">Bitcoin (BTC)</div>
+      <div class="btc-sub" id="btc-updated">Just now</div>
+    </div>
+
+    <div class="btc-right">
+      <span id="btc-price" class="btc-price-value">-</span>
+      <span id="btc-change" class="btc-chip gain">-</span>
     </div>
   </div>
-  <button id="remove-bg">Remove Background</button>
 </div>
+      
+  </div>
 
 
-</div>
+    
+  <div class="search-card">
+    <form action="https://www.google.com/search" method="GET" target="_blank" class="search-form">
+      <input type="text" name="q" placeholder="Search Google..." required />
+      <button type="submit" class="m3-icon-button">
+        <span class="material-icons-round">search</span>
+      </button>
+    </form>
+  </div>
+  <!-- Settings Button -->
+  <button id="open-settings" class="m3-icon-button" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+    <span class="material-icons-round">settings</span>
+  </button>
+
+  <!-- Settings Side Panel -->
+  <div id="settings-panel" class="settings-panel">
+    <div class="settings-header">
+      <h3>Settings</h3>
+      <button id="close-settings" class="m3-icon-button">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+
+  <div class="settings-section">
+    <label>Color Scheme</label>
+    <div class="color-swatches">
+      <button class="swatch" data-theme="blue" style="--swatch:#4a90e2"></button>
+      <button class="swatch" data-theme="light-blue" style="--swatch:#03a9f4"></button>
+      <button class="swatch" data-theme="cyan" style="--swatch:#00bcd4"></button>
+      <button class="swatch" data-theme="teal" style="--swatch:#009688"></button>
+      <button class="swatch" data-theme="green" style="--swatch:#4caf50"></button>
+      <button class="swatch" data-theme="light-green" style="--swatch:#8bc34a"></button>
+      <button class="swatch" data-theme="lime" style="--swatch:#cddc39"></button>
+      <button class="swatch" data-theme="amber" style="--swatch:#ffc107"></button>
+      <button class="swatch" data-theme="orange" style="--swatch:#ff9800"></button>
+      <button class="swatch" data-theme="deep-orange" style="--swatch:#ff5722"></button>
+      <button class="swatch" data-theme="red-orange" style="--swatch:#ff7043"></button>
+      <button class="swatch" data-theme="red" style="--swatch:#ff5252"></button>
+      <button class="swatch" data-theme="pink" style="--swatch:#e91e63"></button>
+      <button class="swatch" data-theme="pink-lavender" style="--swatch:#e040fb"></button>
+      <button class="swatch" data-theme="purple" style="--swatch:#9c27b0"></button>
+      <button class="swatch" data-theme="purple-gray" style="--swatch:#7e57c2"></button>
+      <button class="swatch" data-theme="indigo" style="--swatch:#3f51b5"></button>
+      <button class="swatch" data-theme="blue-gray" style="--swatch:#607d8b"></button>
+      <button class="swatch" data-theme="brown" style="--swatch:#795548"></button>
+      <button class="swatch" data-theme="gray" style="--swatch:#9e9e9e"></button>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <label>Background Image</label>
+    <div class="background-controls" id="bg-dropzone">
+      <label class="custom-file-upload">
+        Choose File
+        <input type="file" id="bg-upload" accept="image/*">
+      </label>
+      <div id="bg-preview" class="hidden">
+        <img id="bg-thumb" src="" alt="Preview">
+        <span id="bg-name"></span>
+      </div>
+    </div>
+    <button id="remove-bg">Remove Background</button>
+  </div>
 
 
-  <script src="script.js"></script>
-</body>
-</html>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+    
+  </body>
+  </html>
