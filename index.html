@@ -20,48 +20,82 @@
   </header>
 
   <div class="grid-container">
-   <div class="card shortcuts-card">
-  <h3>Shortcuts</h3>
-  <div class="shortcuts">
+ <div class="card shortcuts-card">
+  <div class="shortcuts-header">
+    <h3>Shortcuts</h3>
+    <button id="edit-shortcuts" class="m3-icon-button" title="Edit shortcuts">
+      <span class="material-icons-round">edit</span>
+    </button>
+  </div>
 
-    <!-- YouTube -->
-    <a href="https://youtube.com" target="_blank" class="m3-button">
+  <div class="shortcuts" id="shortcuts-list">
+    <!-- Make sure each <a> has: data-id, <img>, and <span class="shortcut-name"> -->
+    <a href="https://youtube.com" target="_blank" class="m3-button" data-id="youtube">
       <img src="yt.svg" alt="YouTube" class="shortcut-icon"/>
-      YouTube
+      <span class="shortcut-name">YouTube</span>
     </a>
 
-    <!-- ChatGPT -->
-    <a href="https://chat.openai.com" target="_blank" class="m3-button">
+    <a href="https://chat.openai.com" target="_blank" class="m3-button" data-id="chatgpt">
       <img src="chat.svg" alt="ChatGPT" class="shortcut-icon"/>
-      ChatGPT
+      <span class="shortcut-name">ChatGPT</span>
     </a>
 
-    <!-- Gemini -->
-    <a href="https://gemini.google.com" target="_blank" class="m3-button">
+    <a href="https://gemini.google.com" target="_blank" class="m3-button" data-id="gemini">
       <img src="gemini.svg" alt="Gemini" class="shortcut-icon"/>
-      Gemini
+      <span class="shortcut-name">Gemini</span>
     </a>
 
-    <!-- Instagram -->
-    <a href="https://instagram.com" target="_blank" class="m3-button">
+    <a href="https://instagram.com" target="_blank" class="m3-button" data-id="instagram">
       <img src="instagram.svg" alt="Instagram" class="shortcut-icon"/>
-      Instagram
+      <span class="shortcut-name">Instagram</span>
     </a>
 
-    <!-- GitHub -->
-    <a href="https://github.com" target="_blank" class="m3-button">
+    <a href="https://github.com" target="_blank" class="m3-button" data-id="github">
       <img src="github.svg" alt="GitHub" class="shortcut-icon"/>
-      GitHub
+      <span class="shortcut-name">GitHub</span>
     </a>
 
-    <!-- Cloudflare Dashboard -->
-    <a href="https://dash.cloudflare.com" target="_blank" class="m3-button">
+    <a href="https://dash.cloudflare.com" target="_blank" class="m3-button" data-id="cloudflare">
       <img src="cloudflare.svg" alt="Cloudflare" class="shortcut-icon"/>
-      Cloudflare
+      <span class="shortcut-name">Cloudflare</span>
     </a>
-
   </div>
 </div>
+
+<!-- Editor modal -->
+<div id="shortcut-editor" class="editor-modal hidden" aria-hidden="true">
+  <div class="editor-content" role="dialog" aria-modal="true" aria-labelledby="editor-title">
+    <h3 id="editor-title">Edit Shortcut</h3>
+
+    <label class="editor-row">
+      <span>Name</span>
+      <input id="edit-name" type="text" placeholder="My Site">
+    </label>
+
+    <label class="editor-row">
+      <span>Link</span>
+      <input id="edit-link" type="url" placeholder="https://example.com">
+    </label>
+
+    <div class="editor-row">
+      <span>Icon</span>
+      <div class="icon-edit">
+        <img id="edit-preview" class="shortcut-icon" alt="Icon preview" />
+        <label class="custom-file-upload">
+          Upload Icon
+          <input type="file" id="edit-file" accept="image/*">
+        </label>
+        <input id="edit-img-url" type="url" placeholder="or paste image URL">
+      </div>
+    </div>
+
+    <div class="editor-actions">
+      <button id="editor-save" class="m3-icon-button"><span class="material-icons-round">check</span></button>
+      <button id="editor-cancel" class="m3-icon-button"><span class="material-icons-round">close</span></button>
+    </div>
+  </div>
+</div>
+
 
 
     <div class="card todo-card">

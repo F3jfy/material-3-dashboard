@@ -318,3 +318,218 @@ window.addEventListener("DOMContentLoaded", () => {
     if (selected) selected.classList.add('selected');
   }
 });
+
+// ===== Shortcuts: edit mode + reorder + edit name/link/icon + persistence =====
+const editBtn = document.getElementById("edit-shortcuts");
+const shortcutsList = document.getElementById("shortcuts-list");
+
+const modal = document.getElementById("shortcut-editor");
+const inputName = document.getElementById("edit-name");
+const inputLink = document.getElementById("edit-link");
+const inputImgUrl = document.getElementById("edit-img-url");
+const inputFile = document.getElementById("edit-file");
+const previewImg = document.getElementById("edit-preview");
+const btnSave = document.getElementById("editor-save");
+const btnCancel = document.getElementById("editor-cancel");
+
+let editMode = false;
+let dragged = null;
+let placeholder = null;
+let currentEl = null;
+
+// ---- helpers
+function normalizeUrl(url) {
+  if (!url) return "";
+  const trimmed = url.trim();
+  // if it already has a scheme like http:, https:, mailto:, etc — keep it
+  if (/^[a-z][a-z0-9+.-]*:/.test(trimmed)) return trimmed;
+  // if it starts with // (protocol-relative), add https:
+  if (/^\/\//.test(trimmed)) return "https:" + trimmed;
+  // otherwise, assume https
+  return "https://" + trimmed.replace(/^\/+/, "");
+}
+
+function getDataFromDOM() {
+  return [...shortcutsList.children].map(el => ({
+    id: el.dataset.id,
+    name: el.querySelector(".shortcut-name")?.textContent?.trim() || el.textContent.trim(),
+    link: el.getAttribute("href"),
+    img: el.querySelector("img")?.getAttribute("src") || "",
+  }));
+}
+
+function applyDataToDOM(arr) {
+  arr.forEach(d => {
+    const el = shortcutsList.querySelector(`[data-id="${d.id}"]`);
+    if (!el) return;
+    const nameEl = el.querySelector(".shortcut-name");
+    const imgEl = el.querySelector("img");
+    if (nameEl) nameEl.textContent = d.name || "";
+    if (imgEl && d.img) imgEl.src = d.img;
+    if (d.link) el.setAttribute("href", d.link);
+    shortcutsList.appendChild(el); // re-order
+  });
+}
+
+function saveShortcuts() {
+  localStorage.setItem("shortcutsData", JSON.stringify(getDataFromDOM()));
+}
+
+function loadShortcuts() {
+  const saved = JSON.parse(localStorage.getItem("shortcutsData") || "null");
+  if (saved && Array.isArray(saved)) applyDataToDOM(saved);
+  // upgrade: ensure <span.shortcut-name> exists
+  [...shortcutsList.children].forEach(el => {
+    if (!el.querySelector(".shortcut-name")) {
+      const text = (el.textContent || "").trim();
+      // clear and rebuild: img + span
+      const img = el.querySelector("img");
+      el.textContent = "";
+      if (img) el.appendChild(img);
+      const s = document.createElement("span");
+      s.className = "shortcut-name";
+      s.textContent = text;
+      el.appendChild(s);
+    }
+  });
+}
+loadShortcuts();
+
+// ---- edit mode toggle
+editBtn.addEventListener("click", () => {
+  editMode = !editMode;
+  editBtn.classList.toggle("active", editMode);
+  [...shortcutsList.children].forEach(a => {
+    a.draggable = editMode;
+    a.classList.toggle("editing", editMode);
+  });
+});
+
+// prevent navigation while in edit mode
+shortcutsList.addEventListener("click", e => {
+  if (!editMode) return;
+  e.preventDefault();
+  const a = e.target.closest("a");
+  if (!a) return;
+  openEditor(a);
+});
+
+// ---- dnd reorder
+shortcutsList.addEventListener("dragstart", e => {
+  if (!editMode) return;
+  const a = e.target.closest("a");
+  if (!a) return;
+  dragged = a;
+  a.classList.add("dragging");
+
+  placeholder = document.createElement("div");
+  placeholder.className = "placeholder";
+  shortcutsList.insertBefore(placeholder, a.nextSibling);
+});
+
+shortcutsList.addEventListener("dragend", e => {
+  if (!editMode) return;
+  const a = e.target.closest("a");
+  if (!a) return;
+  a.classList.remove("dragging");
+  if (placeholder) {
+    shortcutsList.insertBefore(a, placeholder);
+    placeholder.remove();
+    placeholder = null;
+  }
+  dragged = null;
+  saveShortcuts();
+});
+
+shortcutsList.addEventListener("dragover", e => {
+  e.preventDefault();
+  if (!editMode || !dragged) return;
+
+  const y = e.clientY;
+  const siblings = [...shortcutsList.querySelectorAll("a:not(.dragging)")];
+
+  const afterElement = siblings.find(el => {
+    const box = el.getBoundingClientRect();
+    return y < box.top + box.height / 2;
+  });
+
+  if (afterElement) {
+    shortcutsList.insertBefore(placeholder, afterElement);
+  } else {
+    shortcutsList.appendChild(placeholder);
+  }
+});
+
+// ---- editor (modal) logic
+function openEditor(el) {
+  currentEl = el;
+  const name = el.querySelector(".shortcut-name")?.textContent || "";
+  const link = el.getAttribute("href") || "";
+  const img = el.querySelector("img")?.getAttribute("src") || "";
+
+  inputName.value = name;
+  inputLink.value = link;
+  inputImgUrl.value = "";
+  previewImg.src = img || "";
+  modal.classList.remove("hidden");
+  modal.setAttribute("aria-hidden", "false");
+  inputName.focus();
+}
+
+function closeEditor() {
+  modal.classList.add("hidden");
+  modal.setAttribute("aria-hidden", "true");
+  inputFile.value = "";
+  inputImgUrl.value = "";
+  currentEl = null;
+}
+
+btnCancel.addEventListener("click", e => {
+  e.preventDefault();
+  closeEditor();
+});
+
+modal.addEventListener("click", e => {
+  if (e.target === modal) closeEditor(); // click outside to close
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !modal.classList.contains("hidden")) closeEditor();
+});
+
+// handle file -> preview
+inputFile.addEventListener("change", e => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { previewImg.src = ev.target.result; };
+  reader.readAsDataURL(file);
+});
+
+// handle pasted image URL -> preview
+inputImgUrl.addEventListener("change", () => {
+  if (inputImgUrl.value.trim()) {
+    previewImg.src = inputImgUrl.value.trim();
+  }
+});
+
+// save edits
+btnSave.addEventListener("click", e => {
+  e.preventDefault();
+  if (!currentEl) return;
+
+  const name = inputName.value.trim() || "Shortcut";
+  const link = normalizeUrl(inputLink.value);
+  const imgSrc = previewImg.src || currentEl.querySelector("img")?.getAttribute("src") || "";
+
+  // apply to DOM
+  currentEl.querySelector(".shortcut-name").textContent = name;
+  currentEl.setAttribute("href", link);
+  const imgEl = currentEl.querySelector("img");
+  if (imgEl && imgSrc) {
+    imgEl.src = imgSrc;
+    imgEl.alt = name;
+  }
+
+  saveShortcuts();
+  closeEditor();
+});
