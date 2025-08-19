@@ -131,15 +131,19 @@
 
 <div class="settings-section">
   <label>Background Image</label>
-  <div class="background-controls">
+  <div class="background-controls" id="bg-dropzone">
     <label class="custom-file-upload">
       Choose File
       <input type="file" id="bg-upload" accept="image/*">
     </label>
+    <div id="bg-preview" class="hidden">
+      <img id="bg-thumb" src="" alt="Preview">
+      <span id="bg-name"></span>
+    </div>
   </div>
-  <div id="bg-name"></div>
   <button id="remove-bg">Remove Background</button>
 </div>
+
 
 </div>
 

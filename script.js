@@ -185,9 +185,46 @@ document.querySelectorAll(".swatch").forEach(swatch => {
     }
   });
 });
-// --- Background Uploader with localStorage ---
+// --- Background Uploader with Preview & localStorage ---
 const bgUpload = document.getElementById("bg-upload");
 const removeBg = document.getElementById("remove-bg");
+
+// Create preview elements
+let bgPreview = document.getElementById("bg-preview");
+if (!bgPreview) {
+  bgPreview = document.createElement("div");
+  bgPreview.id = "bg-preview";
+  bgPreview.style.display = "flex";
+  bgPreview.style.alignItems = "center";
+  bgPreview.style.gap = "0.5rem";
+  bgPreview.style.marginTop = "0.5rem";
+
+  const bgThumb = document.createElement("img");
+  bgThumb.id = "bg-thumb";
+  bgThumb.style.width = "50px";
+  bgThumb.style.height = "50px";
+  bgThumb.style.objectFit = "cover";
+  bgThumb.style.borderRadius = "0.75rem";
+  bgThumb.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+
+  const bgName = document.createElement("span");
+  bgName.id = "bg-name";
+  bgName.style.font = "var(--font-body)";
+  bgName.style.color = "var(--on-surface-variant)";
+  bgName.style.maxWidth = "150px";
+  bgName.style.overflow = "hidden";
+  bgName.style.textOverflow = "ellipsis";
+  bgName.style.whiteSpace = "nowrap";
+
+  bgPreview.appendChild(bgThumb);
+  bgPreview.appendChild(bgName);
+
+  const container = document.querySelector(".background-controls");
+  container.appendChild(bgPreview);
+}
+
+const bgThumb = document.getElementById("bg-thumb");
+const bgName = document.getElementById("bg-name");
 
 // Load saved background if it exists
 window.addEventListener("DOMContentLoaded", () => {
@@ -196,11 +233,10 @@ window.addEventListener("DOMContentLoaded", () => {
     document.body.style.backgroundImage = `url(${savedBg})`;
     document.body.style.backgroundSize = "cover";
     document.body.style.backgroundPosition = "center";
-  }
-
-  const savedTheme = localStorage.getItem("colorTheme");
-  if (savedTheme) {
-    applyTheme(savedTheme);
+    
+    bgThumb.src = savedBg;
+    bgName.textContent = "Saved Background";
+    bgPreview.style.display = "flex";
   }
 });
 
@@ -211,13 +247,18 @@ bgUpload.addEventListener("change", (e) => {
     reader.onload = (ev) => {
       const bgData = ev.target.result;
 
-      // apply
+      // Apply background
       document.body.style.backgroundImage = `url(${bgData})`;
       document.body.style.backgroundSize = "cover";
       document.body.style.backgroundPosition = "center";
 
-      // save
+      // Save to localStorage
       localStorage.setItem("customBackground", bgData);
+
+      // Show preview
+      bgThumb.src = bgData;
+      bgName.textContent = file.name;
+      bgPreview.style.display = "flex";
     };
     reader.readAsDataURL(file);
   }
@@ -226,14 +267,20 @@ bgUpload.addEventListener("change", (e) => {
 removeBg.addEventListener("click", () => {
   document.body.style.backgroundImage = "";
   localStorage.removeItem("customBackground");
+
+  // Hide preview
+  bgThumb.src = "";
+  bgName.textContent = "";
+  bgPreview.style.display = "none";
 });
+
 
 // --- Theme Color Picker with localStorage ---
 const swatches = document.querySelectorAll(".swatch");
 
 swatches.forEach((swatch) => {
   swatch.addEventListener("click", () => {
-    const theme = swatch.dataset.theme;
+    const theme = swatch.dataset.theme; 
     applyTheme(theme);
     localStorage.setItem("colorTheme", theme);
   });
@@ -242,3 +289,32 @@ swatches.forEach((swatch) => {
 function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
 }
+document.querySelectorAll('.swatch').forEach(swatch => {
+  swatch.addEventListener('click', () => {
+    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
+    swatch.classList.add('selected');
+  }); 
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  // --- Load background ---
+  const savedBg = localStorage.getItem("customBackground");
+  if (savedBg) {
+    document.body.style.backgroundImage = `url(${savedBg})`;
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
+
+    bgThumb.src = savedBg;
+    bgName.textContent = "Saved Background";
+    bgPreview.style.display = "flex";
+  }
+
+  // --- Load theme ---
+  const savedTheme = localStorage.getItem("colorTheme");
+  if (savedTheme) {
+    applyTheme(savedTheme);
+    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
+    const selected = document.querySelector(`.swatch[data-theme="${savedTheme}"]`);
+    if (selected) selected.classList.add('selected');
+  }
+});
