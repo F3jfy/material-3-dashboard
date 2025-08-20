@@ -1,4 +1,41 @@
-// Ripple effect
+// API KEYS
+
+// Load keys from localStorage, fallback to defaults
+const MOBULA_API_KEY = localStorage.getItem("crypto-api-key") || "099a2759-ede8-44f6-b195-9b8c0c251c2f";
+const WEATHER_API_KEY = localStorage.getItem("weather-api-key") || "dc99d6329ddd199a51fc74e0eb5d78d9";
+
+// Example default city (can also make this user-editable later)
+const city = encodeURIComponent("Prague");
+
+
+
+
+
+
+
+const weatherInput = document.getElementById("weather-api-key");
+const cryptoInput = document.getElementById("crypto-api-key");
+const saveApiBtn = document.getElementById("save-api-keys");
+const resetApiBtn = document.getElementById("reset-api-keys");
+
+// Restore on load
+weatherInput.value = localStorage.getItem("weather-api-key") || "";
+cryptoInput.value = localStorage.getItem("crypto-api-key") || "";
+
+saveApiBtn.addEventListener("click", () => {
+  localStorage.setItem("weather-api-key", weatherInput.value.trim());
+  localStorage.setItem("crypto-api-key", cryptoInput.value.trim());
+  alert("API keys saved locally ✅ Refresh to apply.");
+});
+
+resetApiBtn.addEventListener("click", () => {
+  localStorage.removeItem("weather-api-key");
+  localStorage.removeItem("crypto-api-key");
+  alert("API keys cleared ❌ Refresh to use defaults.");
+});
+
+
+
 document.addEventListener("click", function(e) {
   const target = e.target.closest(".md-button");
   if (!target) return;
@@ -30,27 +67,25 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-// Weather
-const API_KEY = "dc99d6329ddd199a51fc74e0eb5d78d9";
-const city = encodeURIComponent("Prague");
 
-fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},CZ&units=metric&appid=${API_KEY}`)
-  .then(res => res.json())
-  .then(data => {
-    if (data.cod !== 200) {
-      console.error("Weather API error:", data);
-      document.getElementById("description").textContent = "Unable to fetch weather";
-      return;
-    }
-    document.getElementById("temp").textContent = `${Math.round(data.main.temp)}°C`;
-    document.getElementById("description").textContent = data.weather[0].description;
-    document.getElementById("weather-icon").src =
-      `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-  })
-  .catch(err => {
-    console.error("Fetch failed:", err);
-    document.getElementById("description").textContent = "Unable to fetch weather";
-  });
+
+function updateWeather() {
+  const key = localStorage.getItem("weather-api-key") || WEATHER_API_KEY;
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},CZ&units=metric&appid=${key}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.cod !== 200) return;
+      document.getElementById("temp").textContent = `${Math.round(data.main.temp)}°C`;
+      document.getElementById("description").textContent = data.weather[0].description;
+      document.getElementById("weather-icon").src =
+        `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+    })
+    .catch(err => console.error(err));
+}
+
+// Call on load
+updateWeather();
+
 
 
 // To-Do List
@@ -177,7 +212,6 @@ document.querySelectorAll(".swatch").forEach(swatch => {
       container.style.background = '#1c1b1f';
     } else {
       document.documentElement.setAttribute('data-theme', theme);
-      createOrbs(theme);
 
       if(theme === 'purple') container.style.background = '#2c1a3f';
       if(theme === 'blue')   container.style.background = '#0b1e33';
@@ -535,20 +569,6 @@ btnSave.addEventListener("click", e => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-// === YOUR MOBULA API KEY HERE ===
-// tip: for local dev you can leave it empty, but for production put your real key
-const MOBULA_API_KEY = '099a2759-ede8-44f6-b195-9b8c0c251c2f'; // <-- replace with your key
 
 const BTC_CACHE_KEY  = 'btcPriceData_v1';
 const BTC_CACHE_TIME = 'btcPriceTime_v1';
