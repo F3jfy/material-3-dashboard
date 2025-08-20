@@ -211,7 +211,7 @@ document.querySelectorAll(".swatch").forEach(swatch => {
       createOrbs('default');
       container.style.background = '#1c1b1f';
     } else {
-      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-theme', theme); 
 
       if(theme === 'purple') container.style.background = '#2c1a3f';
       if(theme === 'blue')   container.style.background = '#0b1e33';
