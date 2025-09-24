@@ -681,3 +681,139 @@ removeBg.addEventListener("click", () => {
   bgPreview.classList.add("hidden");
   bgEmptyIcon.style.display = "flex"; // show icon again
 });
+// Apply ripple effect to Material You buttons
+document.addEventListener("click", function (e) {
+  const target = e.target.closest(
+    ".m3-button, .m3-icon-button, .custom-file-upload, .api-buttons .m3-button, #remove-bg"
+  );
+  if (!target) return;
+
+  const ripple = document.createElement("span");
+  ripple.classList.add("ripple");
+
+  const rect = target.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  ripple.style.width = ripple.style.height = size + "px";
+  ripple.style.left = e.clientX - rect.left - size / 2 + "px";
+  ripple.style.top = e.clientY - rect.top - size / 2 + "px";
+
+  target.appendChild(ripple);
+
+  ripple.addEventListener("animationend", () => ripple.remove());
+});
+/* ============================
+   Now Playing (YouTube Music via Last.fm)
+   ============================ */
+const npBar     = document.getElementById("nowplaying-bar");
+const npThumb   = document.getElementById("np-thumb");
+const npTitle   = document.getElementById("np-title");
+const npArtist  = document.getElementById("np-artist");
+const npStatus  = document.getElementById("np-status");
+const npOpenBtn = document.getElementById("np-open");
+
+const lastfmUserInput = document.getElementById("lastfm-user");
+const lastfmKeyInput  = document.getElementById("lastfm-key");
+const saveLastfmBtn   = document.getElementById("save-lastfm");
+const resetLastfmBtn  = document.getElementById("reset-lastfm");
+
+function getLastfmConfig() {
+  return {
+    user: localStorage.getItem("lastfmUser") || "",
+    key:  localStorage.getItem("lastfmKey")  || "",
+  };
+}
+
+function setLastfmConfig({ user, key }) {
+  if (typeof user === "string") localStorage.setItem("lastfmUser", user.trim());
+  if (typeof key  === "string") localStorage.setItem("lastfmKey",  key.trim());
+}
+
+function initLastfmSettingsUI() {
+  const { user, key } = getLastfmConfig();
+  lastfmUserInput && (lastfmUserInput.value = user);
+  lastfmKeyInput  && (lastfmKeyInput.value  = key);
+
+  saveLastfmBtn?.addEventListener("click", () => {
+    setLastfmConfig({ user: lastfmUserInput.value, key: lastfmKeyInput.value });
+    fetchNowPlaying();
+  });
+
+  resetLastfmBtn?.addEventListener("click", () => {
+    localStorage.removeItem("lastfmUser");
+    localStorage.removeItem("lastfmKey");
+    lastfmUserInput.value = "";
+    lastfmKeyInput.value  = "";
+    clearNowPlayingUI();
+  });
+}
+
+function clearNowPlayingUI() {
+  if (npThumb)  npThumb.src = "";
+  if (npTitle)  npTitle.textContent  = "—";
+  if (npArtist) npArtist.textContent = "—";
+  if (npStatus) npStatus.textContent = "Waiting for track…";
+  if (npBar)    npBar.classList.add("hidden");
+  npOpenBtn?.setAttribute("disabled", "true");
+}
+
+function timeAgoFromUTS(uts) {
+  const secs = Math.max(0, Math.floor(Date.now()/1000 - Number(uts)));
+  if (secs < 60) return `${secs}s ago`;
+  const mins = Math.floor(secs/60);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins/60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs/24);
+  return `${days}d ago`;
+}
+
+async function fetchNowPlaying() {
+  const { user, key } = getLastfmConfig();
+  if (!user || !key) { clearNowPlayingUI(); return; }
+
+  try {
+    const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${encodeURIComponent(user)}&api_key=${encodeURIComponent(key)}&format=json&limit=1`;
+    const res = await fetch(url);
+    const json = await res.json();
+
+    const track = json?.recenttracks?.track?.[0];
+    if (!track) { clearNowPlayingUI(); return; }
+
+    const title  = track?.name || "Unknown Title";
+    const artist = track?.artist?.["#text"] || "Unknown Artist";
+    const imgs   = track?.image || [];
+    const imgUrl = (imgs.find(i => i.size === "extralarge") || imgs.find(i => i.size === "large") || imgs[imgs.length-1])?.["#text"] || "";
+
+    const nowPlaying = track?.["@attr"]?.nowplaying === "true";
+    const uts = track?.date?.uts;
+
+    // Update UI
+    npThumb.src = imgUrl || "";
+    npTitle.textContent = title;
+    npArtist.textContent = artist;
+
+    if (nowPlaying) {
+      npStatus.textContent = "Now playing";
+    } else {
+      npStatus.textContent = uts ? `Last played • ${timeAgoFromUTS(uts)}` : "Recently played";
+    }
+
+    // Open button: YouTube Music search for the track
+    const q = encodeURIComponent(`${artist} ${title}`);
+    npOpenBtn.removeAttribute("disabled");
+    npOpenBtn.onclick = () => {
+      window.open(`https://music.youtube.com/search?q=${q}`, "_blank");
+    };
+
+    // Show the bar
+    npBar.classList.remove("hidden");
+  } catch (err) {
+    console.error("Last.fm fetch error:", err);
+    if (npStatus) npStatus.textContent = "Unable to load Now Playing";
+  }
+}
+
+// Init on load + poll every 30s
+initLastfmSettingsUI();
+fetchNowPlaying();
+setInterval(fetchNowPlaying, 30000);

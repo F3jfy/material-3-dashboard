@@ -19,6 +19,7 @@
       <h2 id="greeting">Hello</h2>
       <div id="time"></div>
     </header>
+    <a href="https://adamfejfar.com" target="_blank" id="site-credit">adamfejfar.com</a>
 
     <div class="grid-container">
   <div class="card shortcuts-card">
@@ -146,6 +147,21 @@
       </button>
     </form>
   </div>
+
+
+   <!-- Floating Now Playing (bottom center) -->
+<div id="nowplaying-bar" class="hidden">
+  <img id="np-thumb" src="" alt="album art" />
+  <div class="np-info">
+    <div id="np-title">—</div>
+    <div id="np-artist">—</div>
+    <div id="np-status">Waiting for track…</div>
+  </div>
+  <button id="np-open" class="m3-icon-button" title="Open in YouTube Music">
+    <span class="material-icons-round">open_in_new</span>
+  </button>
+</div>
+
   <!-- Settings Button -->
   <button id="open-settings" class="m3-icon-button" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
     <span class="material-icons-round">settings</span>
@@ -186,7 +202,27 @@
 </div>
 
   </div>
-
+<!-- Settings Section for Last.fm (inside your settings panel) -->
+<div class="settings-section">
+  <h3>Now Playing (Last.fm)</h3>
+  <div class="api-inputs">
+    <label>
+      Last.fm Username
+      <input id="lastfm-user" type="text" placeholder="your_username" />
+    </label>
+    <label>
+      Last.fm API Key
+      <input id="lastfm-key" type="text" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+    </label>
+  </div>
+  <div class="api-buttons">
+    <button id="save-lastfm" class="m3-button">Save</button>
+    <button id="reset-lastfm" class="m3-button danger">Reset</button>
+  </div>
+  <p class="muted" style="margin:0;">
+    Tip: Install a browser scrobbler (like Web Scrobbler) to send YouTube Music plays to Last.fm.
+  </p>
+</div>
   <div class="settings-section">
   <label>Background Image</label>
   <div class="background-controls" id="bg-dropzone">
@@ -228,7 +264,10 @@
 </div>
 
 </div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
+
+
+
     <script src="script.js"></script>
     
   </body>
