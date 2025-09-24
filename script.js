@@ -657,3 +657,27 @@ document.addEventListener('visibilitychange', () => {
     if (Date.now() - cachedTime >= CACHE_MS) loadBtc();
   }
 });
+const bgEmptyIcon = document.getElementById("bg-empty-icon");
+
+// When background is set
+function showPreview(bgData, fileName = "Saved Background") {
+  document.body.style.backgroundImage = `url(${bgData})`;
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundPosition = "center";
+
+  bgThumb.src = bgData;
+  bgName.textContent = fileName;
+  bgPreview.classList.remove("hidden");
+  bgEmptyIcon.style.display = "none"; // hide icon
+}
+
+// When background is removed
+removeBg.addEventListener("click", () => {
+  document.body.style.backgroundImage = "";
+  localStorage.removeItem("customBackground");
+
+  bgThumb.src = "";
+  bgName.textContent = "";
+  bgPreview.classList.add("hidden");
+  bgEmptyIcon.style.display = "flex"; // show icon again
+});

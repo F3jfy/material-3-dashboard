@@ -109,29 +109,30 @@
         </div>
         <ul id="todo-list"></ul>
       </div>
-  <div class="card weather-card">
+ <div class="card weather-card">
   <div id="weather-top">
     <div id="weather-main">
       <img id="weather-icon" src="http://openweathermap.org/img/wn/01d@2x.png" alt="weather icon" />
       <div id="temp">-</div>
     </div>
     <div id="description">loading...</div>
+    <!-- NEW: City label -->
+    <div id="location">Prague</div>
   </div>
 
   <div id="btc-bottom">
     <span class="material-icons-round btc-icon" aria-hidden="true">currency_bitcoin</span>
-
     <div class="btc-meta">
       <div class="btc-title">Bitcoin (BTC)</div>
       <div class="btc-sub" id="btc-updated">Just now</div>
     </div>
-
     <div class="btc-right">
       <span id="btc-price" class="btc-price-value">-</span>
       <span id="btc-change" class="btc-chip gain">-</span>
     </div>
   </div>
 </div>
+
       
   </div>
 
@@ -187,19 +188,27 @@
   </div>
 
   <div class="settings-section">
-    <label>Background Image</label>
-    <div class="background-controls" id="bg-dropzone">
-      <label class="custom-file-upload">
-        Choose File
-        <input type="file" id="bg-upload" accept="image/*">
-      </label>
-      <div id="bg-preview" class="hidden">
-        <img id="bg-thumb" src="" alt="Preview">
-        <span id="bg-name"></span>
-      </div>
+  <label>Background Image</label>
+  <div class="background-controls" id="bg-dropzone">
+    <!-- New Upload Icon (hidden once preview is shown) -->
+    <div id="bg-empty-icon">
+      <span class="material-icons-round">cloud_upload</span>
+      <p>Drop image or choose file</p>
     </div>
-    <button id="remove-bg">Remove Background</button>
+
+    <label class="custom-file-upload">
+      Choose File
+      <input type="file" id="bg-upload" accept="image/*">
+    </label>
+
+    <div id="bg-preview" class="hidden">
+      <img id="bg-thumb" src="" alt="Preview">
+      <span id="bg-name"></span>
+    </div>
   </div>
+  <button id="remove-bg">Remove Background</button>
+</div>
+
   <div class="settings-section api-section">
   <h3>API Keys</h3>
   <div class="api-inputs">
