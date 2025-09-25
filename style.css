@@ -1541,73 +1541,136 @@
   }
 }
 
+
 /* ============================
-   Floating Now Playing Bar
+   Shortcuts Modal (Material You style)
    ============================ */
-#nowplaying-bar {
+#shortcuts-modal {
   position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  
+  inset: 0;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-
-  background: rgba(32, 30, 30, 0.55); /* frosted look */
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-
-  padding: 0.6rem 1rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-
-  min-width: 280px;
-  max-width: 90vw;
-  z-index: 1200;
-
-  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 3000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
-#nowplaying-bar.hidden {
-  display: none;
+#shortcuts-modal.active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-#nowplaying-bar img {
-  width: 48px;
-  height: 48px;
-  border-radius: 0.5rem;
-  object-fit: cover;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+#shortcuts-modal .modal-content {
+  background: var(--surface-container);
+  color: var(--on-surface);
+  border-radius: 1.25rem;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  width: min(480px, 92vw);
+
+  /* Animation */
+  transform: scale(0.9) translateY(20px);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
 }
 
-#nowplaying-bar .np-info {
-  flex: 1;
+#shortcuts-modal.active .modal-content {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* Header */
+#shortcuts-modal .modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font: var(--font-headline);
+  color: var(--on-surface);
+  text-align: center;
+}
+
+/* List of shortcuts */
+#shortcuts-modal ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 1.5rem;
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  gap: 0.75rem;
 }
 
-#np-title {
+#shortcuts-modal li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface-container-low);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.75rem;
   font-size: 0.95rem;
-  font-weight: 600;
   color: var(--on-surface);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  transition: background 0.2s ease;
 }
 
-#np-artist,
-#np-status {
-  font-size: 0.8rem;
-  color: var(--on-surface-variant);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+#shortcuts-modal li:hover {
+  background: var(--surface-container);
 }
 
-/* Entrance animation */
-@keyframes slideUp {
-  from { transform: translate(-50%, 100%); opacity: 0; }
-  to   { transform: translate(-50%, 0); opacity: 1; }
+/* Keyboard keys */
+#shortcuts-modal kbd {
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.4rem;
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  min-width: 2rem;
+  text-align: center;
+}
+
+/* Close button */
+#close-shortcuts {
+  display: block;
+  margin: 0 auto;
+  padding: 0.6rem 1.4rem;
+  border-radius: 1rem;
+  background: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  cursor: pointer;
+  font: var(--font-label);
+  transition: filter 0.2s, transform 0.15s, box-shadow 0.25s;
+}
+
+#close-shortcuts:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+#close-shortcuts:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Centered buttons in settings blocks */
+.api-buttons.centered {
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Keyboard shortcut hint style */
+.settings-section kbd {
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+  font-family: monospace;
+  font-size: 0.85rem;
 }

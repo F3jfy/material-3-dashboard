@@ -702,118 +702,116 @@ document.addEventListener("click", function (e) {
   ripple.addEventListener("animationend", () => ripple.remove());
 });
 /* ============================
-   Now Playing (YouTube Music via Last.fm)
+   Import / Export Settings
    ============================ */
-const npBar     = document.getElementById("nowplaying-bar");
-const npThumb   = document.getElementById("np-thumb");
-const npTitle   = document.getElementById("np-title");
-const npArtist  = document.getElementById("np-artist");
-const npStatus  = document.getElementById("np-status");
-const npOpenBtn = document.getElementById("np-open");
-
-const lastfmUserInput = document.getElementById("lastfm-user");
-const lastfmKeyInput  = document.getElementById("lastfm-key");
-const saveLastfmBtn   = document.getElementById("save-lastfm");
-const resetLastfmBtn  = document.getElementById("reset-lastfm");
-
-function getLastfmConfig() {
-  return {
-    user: localStorage.getItem("lastfmUser") || "",
-    key:  localStorage.getItem("lastfmKey")  || "",
+function exportSettings() {
+  const data = {
+    theme: document.documentElement.getAttribute("data-theme"),
+    bg: localStorage.getItem("customBackground") || null,
+    lastfmUser: localStorage.getItem("lastfmUser") || "",
+    lastfmKey: localStorage.getItem("lastfmKey") || "",
+    shortcuts: JSON.parse(localStorage.getItem("shortcuts") || "[]"),
+    todos: JSON.parse(localStorage.getItem("todos") || "[]"),
   };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement("a"), { href: url, download: "dashboard-settings.json" });
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
-function setLastfmConfig({ user, key }) {
-  if (typeof user === "string") localStorage.setItem("lastfmUser", user.trim());
-  if (typeof key  === "string") localStorage.setItem("lastfmKey",  key.trim());
-}
+function importSettings(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
 
-function initLastfmSettingsUI() {
-  const { user, key } = getLastfmConfig();
-  lastfmUserInput && (lastfmUserInput.value = user);
-  lastfmKeyInput  && (lastfmKeyInput.value  = key);
+      if (data.theme) document.documentElement.setAttribute("data-theme", data.theme);
+      if ("bg" in data && data.bg) {
+        localStorage.setItem("customBackground", data.bg);
+        document.body.style.backgroundImage = `url(${data.bg})`;
+      }
+      if ("lastfmUser" in data) localStorage.setItem("lastfmUser", data.lastfmUser || "");
+      if ("lastfmKey" in data) localStorage.setItem("lastfmKey", data.lastfmKey || "");
+      if ("shortcuts" in data) localStorage.setItem("shortcuts", JSON.stringify(data.shortcuts || []));
+      if ("todos" in data) localStorage.setItem("todos", JSON.stringify(data.todos || []));
 
-  saveLastfmBtn?.addEventListener("click", () => {
-    setLastfmConfig({ user: lastfmUserInput.value, key: lastfmKeyInput.value });
-    fetchNowPlaying();
-  });
-
-  resetLastfmBtn?.addEventListener("click", () => {
-    localStorage.removeItem("lastfmUser");
-    localStorage.removeItem("lastfmKey");
-    lastfmUserInput.value = "";
-    lastfmKeyInput.value  = "";
-    clearNowPlayingUI();
-  });
-}
-
-function clearNowPlayingUI() {
-  if (npThumb)  npThumb.src = "";
-  if (npTitle)  npTitle.textContent  = "—";
-  if (npArtist) npArtist.textContent = "—";
-  if (npStatus) npStatus.textContent = "Waiting for track…";
-  if (npBar)    npBar.classList.add("hidden");
-  npOpenBtn?.setAttribute("disabled", "true");
-}
-
-function timeAgoFromUTS(uts) {
-  const secs = Math.max(0, Math.floor(Date.now()/1000 - Number(uts)));
-  if (secs < 60) return `${secs}s ago`;
-  const mins = Math.floor(secs/60);
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins/60);
-  if (hrs < 24) return `${hrs}h ago`;
-  const days = Math.floor(hrs/24);
-  return `${days}d ago`;
-}
-
-async function fetchNowPlaying() {
-  const { user, key } = getLastfmConfig();
-  if (!user || !key) { clearNowPlayingUI(); return; }
-
-  try {
-    const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${encodeURIComponent(user)}&api_key=${encodeURIComponent(key)}&format=json&limit=1`;
-    const res = await fetch(url);
-    const json = await res.json();
-
-    const track = json?.recenttracks?.track?.[0];
-    if (!track) { clearNowPlayingUI(); return; }
-
-    const title  = track?.name || "Unknown Title";
-    const artist = track?.artist?.["#text"] || "Unknown Artist";
-    const imgs   = track?.image || [];
-    const imgUrl = (imgs.find(i => i.size === "extralarge") || imgs.find(i => i.size === "large") || imgs[imgs.length-1])?.["#text"] || "";
-
-    const nowPlaying = track?.["@attr"]?.nowplaying === "true";
-    const uts = track?.date?.uts;
-
-    // Update UI
-    npThumb.src = imgUrl || "";
-    npTitle.textContent = title;
-    npArtist.textContent = artist;
-
-    if (nowPlaying) {
-      npStatus.textContent = "Now playing";
-    } else {
-      npStatus.textContent = uts ? `Last played • ${timeAgoFromUTS(uts)}` : "Recently played";
+      location.reload();
+    } catch (e) {
+      alert("Invalid settings file.");
     }
-
-    // Open button: YouTube Music search for the track
-    const q = encodeURIComponent(`${artist} ${title}`);
-    npOpenBtn.removeAttribute("disabled");
-    npOpenBtn.onclick = () => {
-      window.open(`https://music.youtube.com/search?q=${q}`, "_blank");
-    };
-
-    // Show the bar
-    npBar.classList.remove("hidden");
-  } catch (err) {
-    console.error("Last.fm fetch error:", err);
-    if (npStatus) npStatus.textContent = "Unable to load Now Playing";
-  }
+  };
+  reader.readAsText(file);
 }
 
-// Init on load + poll every 30s
-initLastfmSettingsUI();
-fetchNowPlaying();
-setInterval(fetchNowPlaying, 30000);
+document.getElementById("export-settings")?.addEventListener("click", exportSettings);
+document.getElementById("import-settings")?.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (file) importSettings(file);
+});
+/* ============================
+   Keyboard Shortcuts Modal
+   ============================ */
+const shortcutsModal = document.getElementById("shortcuts-modal");
+const openShortcutsBtn = document.getElementById("open-shortcuts");
+const closeShortcutsBtn = document.getElementById("close-shortcuts");
+
+function openShortcuts() {
+  shortcutsModal.classList.add("active");
+}
+function closeShortcuts() {
+  shortcutsModal.classList.remove("active");
+}
+
+
+openShortcutsBtn?.addEventListener("click", openShortcuts);
+closeShortcutsBtn?.addEventListener("click", closeShortcuts);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "?") {
+    e.preventDefault();
+    openShortcuts();
+  }
+  if (e.key === "Escape" && !shortcutsModal.classList.contains("hidden")) {
+    closeShortcuts();
+  }
+});
+
+/* ============================
+   Global Keyboard Shortcuts
+   ============================ */
+document.addEventListener("keydown", (e) => {
+  // Ignore if user is typing in an input/textarea
+  if (["INPUT", "TEXTAREA"].includes(e.target.tagName)) return;
+
+  // Open Command Palette (Ctrl/⌘ + K)
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+    e.preventDefault();
+    // Reuse your command palette open function if you have one
+    if (typeof openCmd === "function") openCmd();
+  }
+
+  // Focus Search (/)
+  if (e.key === "/") {
+    e.preventDefault();
+    document.querySelector(".search-form input")?.focus();
+  }
+
+  // Add To-Do (T)
+  if (e.key.toLowerCase() === "t") {
+    e.preventDefault();
+    document.getElementById("todo-text")?.focus();
+  }
+
+  // Open Settings (S)
+  if (e.key.toLowerCase() === "s") {
+    e.preventDefault();
+    document.querySelector(".settings-panel")?.classList.add("active");
+  }
+
+  // Show Shortcut Help (?)
+  if (e.key === "?") {
+    e.preventDefault();
+    openShortcuts();
+  }
+});

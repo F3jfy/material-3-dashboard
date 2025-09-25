@@ -149,19 +149,6 @@
   </div>
 
 
-   <!-- Floating Now Playing (bottom center) -->
-<div id="nowplaying-bar" class="hidden">
-  <img id="np-thumb" src="" alt="album art" />
-  <div class="np-info">
-    <div id="np-title">—</div>
-    <div id="np-artist">—</div>
-    <div id="np-status">Waiting for track…</div>
-  </div>
-  <button id="np-open" class="m3-icon-button" title="Open in YouTube Music">
-    <span class="material-icons-round">open_in_new</span>
-  </button>
-</div>
-
   <!-- Settings Button -->
   <button id="open-settings" class="m3-icon-button" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
     <span class="material-icons-round">settings</span>
@@ -202,27 +189,23 @@
 </div>
 
   </div>
-<!-- Settings Section for Last.fm (inside your settings panel) -->
+<!-- Backup & Restore -->
 <div class="settings-section">
-  <h3>Now Playing (Last.fm)</h3>
-  <div class="api-inputs">
-    <label>
-      Last.fm Username
-      <input id="lastfm-user" type="text" placeholder="your_username" />
-    </label>
-    <label>
-      Last.fm API Key
-      <input id="lastfm-key" type="text" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
-    </label>
+  <h3>Backup & Restore</h3>
+  <div class="api-buttons centered">
+    <button id="export-settings" class="m3-button">Export Settings</button>
+    <label for="import-settings" class="custom-file-upload">Import Settings</label>
+    <input type="file" id="import-settings" accept=".json" style="display:none" />
   </div>
-  <div class="api-buttons">
-    <button id="save-lastfm" class="m3-button">Save</button>
-    <button id="reset-lastfm" class="m3-button danger">Reset</button>
-  </div>
-  <p class="muted" style="margin:0;">
-    Tip: Install a browser scrobbler (like Web Scrobbler) to send YouTube Music plays to Last.fm.
-  </p>
 </div>
+
+<!-- Keyboard Shortcuts Help -->
+<div class="settings-section">
+  <h3>Keyboard Shortcuts</h3>
+  <p class="muted">Press <kbd>?</kbd> anytime to view available shortcuts.</p>
+  <button id="open-shortcuts" class="m3-button">View Shortcuts</button>
+</div>
+
   <div class="settings-section">
   <label>Background Image</label>
   <div class="background-controls" id="bg-dropzone">
@@ -265,6 +248,21 @@
 
 </div>
  
+  <!-- Keyboard Shortcuts Modal -->
+<div id="shortcuts-modal" class="hidden">
+  <div class="modal-content">
+    <h3>Keyboard Shortcuts</h3>
+    <ul>
+  <li><kbd>Ctrl/⌘ + K</kbd> Command Palette</li>
+  <li><kbd>/</kbd> Focus Search</li>
+  <li><kbd>T</kbd> Add To-Do</li>
+  <li><kbd>S</kbd> Open Settings</li>
+  <li><kbd>?</kbd> Show this list</li>
+</ul>
+
+    <button id="close-shortcuts" class="m3-button">Close</button>
+  </div>
+</div>
 
 
 
