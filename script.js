@@ -726,7 +726,7 @@ function importSettings(file) {
     try {
       const data = JSON.parse(reader.result);
 
-      if (data.theme) document.documentElement.setAttribute("data-theme", data.theme);
+      if (data.theme) document.documentElement.setAttribute("theme", data.theme);
       if ("bg" in data && data.bg) {
         localStorage.setItem("customBackground", data.bg);
         document.body.style.backgroundImage = `url(${data.bg})`;
