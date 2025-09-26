@@ -726,7 +726,10 @@ function importSettings(file) {
     try {
       const data = JSON.parse(reader.result);
 
-      if (data.theme) document.documentElement.setAttribute("theme", data.theme);
+      if (data.theme) {
+        document.documentElement.setAttribute("data-theme", data.theme);
+        localStorage.setItem("theme", data.theme); // persist theme
+      }
       if ("bg" in data && data.bg) {
         localStorage.setItem("customBackground", data.bg);
         document.body.style.backgroundImage = `url(${data.bg})`;
@@ -743,6 +746,8 @@ function importSettings(file) {
   };
   reader.readAsText(file);
 }
+
+
 
 document.getElementById("export-settings")?.addEventListener("click", exportSettings);
 document.getElementById("import-settings")?.addEventListener("change", (e) => {
