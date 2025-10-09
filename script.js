@@ -704,55 +704,83 @@ document.addEventListener("click", function (e) {
 /* ============================
    Import / Export Settings
    ============================ */
+
+// I have updated this function to correctly get the shortcuts data.
 function exportSettings() {
   const data = {
-    theme: document.documentElement.getAttribute("data-theme"),
+    theme: document.documentElement.getAttribute("data-theme") || "default",
     bg: localStorage.getItem("customBackground") || null,
-    lastfmUser: localStorage.getItem("lastfmUser") || "",
-    lastfmKey: localStorage.getItem("lastfmKey") || "",
-    shortcuts: JSON.parse(localStorage.getItem("shortcuts") || "[]"),
+    weatherApiKey: localStorage.getItem("weather-api-key") || "",
+    cryptoApiKey: localStorage.getItem("crypto-api-key") || "",
+    // FIX: Use the getDataFromDOM() function to get the current state of shortcuts
+    shortcuts: getDataFromDOM(), 
     todos: JSON.parse(localStorage.getItem("todos") || "[]"),
   };
+
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
-  const a = Object.assign(document.createElement("a"), { href: url, download: "dashboard-settings.json" });
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `dashboard-settings-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
   a.click();
+  document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
+// I have updated this function to correctly save the shortcuts data.
 function importSettings(file) {
   const reader = new FileReader();
   reader.onload = () => {
     try {
       const data = JSON.parse(reader.result);
 
+      // Apply theme
       if (data.theme) {
-        document.documentElement.setAttribute("data-theme", data.theme);
-        localStorage.setItem("theme", data.theme); // persist theme
+        localStorage.setItem("colorTheme", data.theme);
+      } else {
+        localStorage.removeItem("colorTheme");
       }
-      if ("bg" in data && data.bg) {
-        localStorage.setItem("customBackground", data.bg);
-        document.body.style.backgroundImage = `url(${data.bg})`;
-      }
-      if ("lastfmUser" in data) localStorage.setItem("lastfmUser", data.lastfmUser || "");
-      if ("lastfmKey" in data) localStorage.setItem("lastfmKey", data.lastfmKey || "");
-      if ("shortcuts" in data) localStorage.setItem("shortcuts", JSON.stringify(data.shortcuts || []));
-      if ("todos" in data) localStorage.setItem("todos", JSON.stringify(data.todos || []));
 
+      // Apply background
+      if (data.bg) {
+        localStorage.setItem("customBackground", data.bg);
+      } else {
+        localStorage.removeItem("customBackground");
+      }
+      
+      // Apply API Keys
+      if ("weatherApiKey" in data) localStorage.setItem("weather-api-key", data.weatherApiKey || "");
+      if ("cryptoApiKey" in data) localStorage.setItem("crypto-api-key", data.cryptoApiKey || "");
+
+      // Apply shortcuts
+      // FIX: Save the imported shortcuts to the correct "shortcutsData" key
+      if ("shortcuts" in data && Array.isArray(data.shortcuts)) {
+        localStorage.setItem("shortcutsData", JSON.stringify(data.shortcuts));
+      }
+
+      // Apply todos
+      if ("todos" in data && Array.isArray(data.todos)) {
+        localStorage.setItem("todos", JSON.stringify(data.todos));
+      }
+
+      alert("Settings imported successfully! The page will now reload.");
       location.reload();
+
     } catch (e) {
-      alert("Invalid settings file.");
+      console.error("Error parsing settings file:", e);
+      alert("Error: Invalid or corrupted settings file.");
     }
   };
   reader.readAsText(file);
 }
 
-
-
 document.getElementById("export-settings")?.addEventListener("click", exportSettings);
 document.getElementById("import-settings")?.addEventListener("change", (e) => {
   const file = e.target.files[0];
-  if (file) importSettings(file);
+  if (file) {
+    importSettings(file);
+  }
 });
 /* ============================
    Keyboard Shortcuts Modal
