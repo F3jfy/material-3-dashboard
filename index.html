@@ -139,14 +139,15 @@
 
 
     
-  <div class="search-card">
-    <form action="https://www.google.com/search" method="GET" class="search-form">
-      <input type="text" name="q" placeholder="Search Google..." required />
-      <button type="submit" class="m3-icon-button">
-        <span class="material-icons-round">search</span>
-      </button>
+ <div class="search-container">
+    <form id="search-form" action="https://www.google.com/search" method="get" target="_blank">
+        <div class="input-wrapper" id="input-wrapper">
+            <span class="material-icons-round">search</span>
+            <input type="text" id="search-input" name="q" autocomplete="off" placeholder="Search Google">
+        </div>
     </form>
-  </div>
+    <ul id="suggestions-box"></ul>
+</div>
 
 
   <!-- Settings Button -->
@@ -266,6 +267,7 @@
 
 
     <script src="script.js"></script>
+    <script src="search.js"></script>
     
   </body>
   </html>

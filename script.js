@@ -368,18 +368,14 @@ const btnCancel = document.getElementById("editor-cancel");
 
 let editMode = false;
 let dragged = null;
-let placeholder = null;
 let currentEl = null;
 
 // ---- helpers
 function normalizeUrl(url) {
   if (!url) return "";
   const trimmed = url.trim();
-  // if it already has a scheme like http:, https:, mailto:, etc — keep it
   if (/^[a-z][a-z0-9+.-]*:/.test(trimmed)) return trimmed;
-  // if it starts with // (protocol-relative), add https:
   if (/^\/\//.test(trimmed)) return "https:" + trimmed;
-  // otherwise, assume https
   return "https://" + trimmed.replace(/^\/+/, "");
 }
 
@@ -401,7 +397,7 @@ function applyDataToDOM(arr) {
     if (nameEl) nameEl.textContent = d.name || "";
     if (imgEl && d.img) imgEl.src = d.img;
     if (d.link) el.setAttribute("href", d.link);
-    shortcutsList.appendChild(el); // re-order
+    shortcutsList.appendChild(el);
   });
 }
 
@@ -412,11 +408,9 @@ function saveShortcuts() {
 function loadShortcuts() {
   const saved = JSON.parse(localStorage.getItem("shortcutsData") || "null");
   if (saved && Array.isArray(saved)) applyDataToDOM(saved);
-  // upgrade: ensure <span.shortcut-name> exists
   [...shortcutsList.children].forEach(el => {
     if (!el.querySelector(".shortcut-name")) {
       const text = (el.textContent || "").trim();
-      // clear and rebuild: img + span
       const img = el.querySelector("img");
       el.textContent = "";
       if (img) el.appendChild(img);
@@ -439,7 +433,6 @@ editBtn.addEventListener("click", () => {
   });
 });
 
-// prevent navigation while in edit mode
 shortcutsList.addEventListener("click", e => {
   if (!editMode) return;
   e.preventDefault();
@@ -448,29 +441,23 @@ shortcutsList.addEventListener("click", e => {
   openEditor(a);
 });
 
-// ---- dnd reorder
+// ---- dnd reorder (REWRITTEN FOR SMOOTH ANIMATION) ----
 shortcutsList.addEventListener("dragstart", e => {
   if (!editMode) return;
   const a = e.target.closest("a");
   if (!a) return;
+  
   dragged = a;
-  a.classList.add("dragging");
-
-  placeholder = document.createElement("div");
-  placeholder.className = "placeholder";
-  shortcutsList.insertBefore(placeholder, a.nextSibling);
+  // Use a timeout to allow the browser to paint the drag image before we apply styles
+  setTimeout(() => {
+    a.classList.add("dragging");
+  }, 0);
 });
 
 shortcutsList.addEventListener("dragend", e => {
-  if (!editMode) return;
-  const a = e.target.closest("a");
-  if (!a) return;
-  a.classList.remove("dragging");
-  if (placeholder) {
-    shortcutsList.insertBefore(a, placeholder);
-    placeholder.remove();
-    placeholder = null;
-  }
+  if (!editMode || !dragged) return;
+  
+  dragged.classList.remove("dragging");
   dragged = null;
   saveShortcuts();
 });
@@ -479,22 +466,31 @@ shortcutsList.addEventListener("dragover", e => {
   e.preventDefault();
   if (!editMode || !dragged) return;
 
-  const y = e.clientY;
-  const siblings = [...shortcutsList.querySelectorAll("a:not(.dragging)")];
-
-  const afterElement = siblings.find(el => {
-    const box = el.getBoundingClientRect();
-    return y < box.top + box.height / 2;
-  });
-
-  if (afterElement) {
-    shortcutsList.insertBefore(placeholder, afterElement);
+  const afterElement = getDragAfterElement(shortcutsList, e.clientY);
+  
+  if (afterElement == null) {
+    shortcutsList.appendChild(dragged);
   } else {
-    shortcutsList.appendChild(placeholder);
+    shortcutsList.insertBefore(dragged, afterElement);
   }
 });
 
-// ---- editor (modal) logic
+function getDragAfterElement(container, y) {
+  const draggableElements = [...container.querySelectorAll("a:not(.dragging)")];
+
+  return draggableElements.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) {
+      return { offset: offset, element: child };
+    } else {
+      return closest;
+    }
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+
+// ---- editor (modal) logic ----
 function openEditor(el) {
   currentEl = el;
   const name = el.querySelector(".shortcut-name")?.textContent || "";
@@ -524,13 +520,12 @@ btnCancel.addEventListener("click", e => {
 });
 
 modal.addEventListener("click", e => {
-  if (e.target === modal) closeEditor(); // click outside to close
+  if (e.target === modal) closeEditor();
 });
 document.addEventListener("keydown", e => {
   if (e.key === "Escape" && !modal.classList.contains("hidden")) closeEditor();
 });
 
-// handle file -> preview
 inputFile.addEventListener("change", e => {
   const file = e.target.files?.[0];
   if (!file) return;
@@ -539,6 +534,31 @@ inputFile.addEventListener("change", e => {
   reader.readAsDataURL(file);
 });
 
+inputImgUrl.addEventListener("change", () => {
+  if (inputImgUrl.value.trim()) {
+    previewImg.src = inputImgUrl.value.trim();
+  }
+});
+
+btnSave.addEventListener("click", e => {
+  e.preventDefault();
+  if (!currentEl) return;
+
+  const name = inputName.value.trim() || "Shortcut";
+  const link = normalizeUrl(inputLink.value);
+  const imgSrc = previewImg.src || currentEl.querySelector("img")?.getAttribute("src") || "";
+
+  currentEl.querySelector(".shortcut-name").textContent = name;
+  currentEl.setAttribute("href", link);
+  const imgEl = currentEl.querySelector("img");
+  if (imgEl && imgSrc) {
+    imgEl.src = imgSrc;
+    imgEl.alt = name;
+  }
+
+  saveShortcuts();
+  closeEditor();
+});
 // handle pasted image URL -> preview
 inputImgUrl.addEventListener("change", () => {
   if (inputImgUrl.value.trim()) {

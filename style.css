@@ -740,73 +740,119 @@
 
 
 
-  /* Full-width Search Card */
-  .search-card {
-    margin-top: 1.5rem;
-    width: 100%;
-    max-width: 1200px; /* match grid-container */
-    background: rgba(33, 30, 29, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 2rem; /* smoother pill shape */
-    padding: 0.75rem 1.25rem;
-    border: 1px solid var(--outline-variant);
-    animation: card-enter 0.6s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+ /* === FINAL SEARCH STYLES (with animation) === */
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 1.5rem auto 20px;
+  background: rgba(33, 30, 29, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 2rem;
+  border: 1px solid var(--outline-variant);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  gap: 0.75rem;
+  transition: border-radius 0.2s ease-in-out;
+}
 
-    margin-left: auto;
-    margin-right: auto;
-    box-sizing: border-box;
-  }
+.search-container:has(#suggestions-box.visible) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
 
-  .search-form {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    width: 100%;
-  }
+/* (The .input-wrapper and #search-input styles remain the same) */
+.input-wrapper {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
 
-  .search-form input {
-    flex-grow: 1;
-    background: transparent;
-    border: none;
-    color: var(--on-surface);
-    padding: 0.75rem 1rem;
-    font-size: 1.1rem;
-    border-radius: 1rem; /* slight rounding for softer input look */
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-  }
+.input-wrapper .material-icons-round {
+  color: var(--on-surface-variant);
+  margin-right: 12px;
+}
 
-  .search-form input::placeholder {
-    color: var(--on-surface-variant);
-  }
+#search-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--on-surface);
+  font-size: 1.1rem;
+  height: 100%;
+}
 
-  .search-form input:focus {
-    outline: none;
-    background-color: rgba(255, 255, 255, 0.05);
-  }
+#search-input::placeholder {
+  color: var(--on-surface-variant);
+}
 
-  .search-form button {
-    background-color: var(--secondary-container);
-    color: var(--on-secondary-container);
-    border: none;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-  }
+.search-container:has(#search-input:focus) {
+  background-color: rgba(50, 47, 46, 0.8);
+}
+/* === END of unchanged styles === */
 
-  .search-form button:hover {
-    background-color: var(--secondary-container);
-    filter: brightness(0.9);
-  }
 
-  .search-form button:active {
-    transform: scale(0.95);
-  }
+/* EDITED: Updated #suggestions-box for the transition */
+#suggestions-box {
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 100%;
+  background: rgba(43, 40, 39, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--outline-variant);
+  border-top: none;
+  border-radius: 0 0 2rem 2rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 100;
+
+  /* --- NEW styles for the transition --- */
+  /* Start hidden and slightly moved up */
+  opacity: 0;
+  transform: translateY(-10px);
+  visibility: hidden;
+  pointer-events: none;
+  /* Define the transition effect */
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+/* NEW: This class makes the suggestions box visible and animates it into place */
+#suggestions-box.visible {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* (The #suggestions-box li styles remain the same) */
+#suggestions-box li {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: var(--on-surface);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+#suggestions-box li:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+#suggestions-box li .material-icons-round {
+  color: var(--on-surface-variant);
+  margin-right: 16px;
+  font-size: 20px;
+}
 /* =========================================================
    SETTINGS PANEL (Transparent, blurred backdrop)
    ========================================================= */
@@ -1673,4 +1719,26 @@
   border-radius: 0.3rem;
   font-family: monospace;
   font-size: 0.85rem;
+}
+/* === SMOOTH DRAG & DROP FOR SHORTCUTS === */
+
+/* This is the key part: animate the shortcuts when their position changes */
+.shortcuts a {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Style for the icon currently being dragged */
+.shortcuts a.dragging {
+  /* Make it semi-transparent and lift it up slightly */
+  opacity: 0.5;
+  transform: scale(1.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+/* While an item is being dragged, the other items are NOT the one being dragged */
+/* This makes sure the browser doesn't show the "ghost" of the original item */
+.shortcuts a.editing:not(.dragging) {
+  /* You can add styles here for how the other icons should look */
+  /* For example, a slight dimming effect: */
+  /* opacity: 0.8; */
 }
