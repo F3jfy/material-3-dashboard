@@ -1742,3 +1742,179 @@
   /* For example, a slight dimming effect: */
   /* opacity: 0.8; */
 }
+
+/* =========================================================
+   UPDATED MOBILE RESPONSIVE STYLES
+   (Hides To-Do List & Fixes Settings Panel)
+   ========================================================= */
+@media screen and (max-width: 768px) {
+
+  /* --- 1. General Layout & Typography --- */
+  body {
+    padding: 1rem;
+    justify-content: flex-start;
+    min-height: 100vh;
+    height: auto;
+  }
+
+  .grid-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .card {
+    padding: 1.25rem;
+  }
+
+  /* --- 2. Header & Search --- */
+  header {
+    margin-bottom: 1.5rem;
+  }
+  
+  #time {
+    font-size: 3rem;
+  }
+
+  #greeting {
+    font-size: 1.25rem;
+  }
+  
+  .search-container {
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+  }
+  
+  #search-input {
+    font-size: 1rem;
+  }
+
+  /* --- 3. Shortcuts Card --- */
+  .shortcuts {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* Only show the first two shortcuts */
+  .shortcuts a {
+    display: none;
+  }
+  .shortcuts a:nth-child(1),
+  .shortcuts a:nth-child(2) {
+    display: flex;
+  }
+
+  .m3-button {
+    padding: 0.75rem 0.5rem;
+    border-radius: 1.25rem;
+  }
+  
+  .shortcut-icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .m3-button .shortcut-name {
+    font-size: 0.8rem;
+  }
+  
+  /* --- 4. To-Do List Card (FIX) --- */
+  /* As requested: Hide the to-do list entirely on mobile to prevent scrolling */
+  .todo-card {
+    display: none;
+  }
+
+  /* --- 5. Weather & BTC Card --- */
+  #weather-top {
+    padding: 1rem;
+    gap: 0.25rem;
+  }
+
+  #btc-bottom {
+    padding: 0.9rem 1.25rem;
+  }
+  
+  #weather-main img {
+    width: 48px;
+    height: 48px;
+  }
+  
+  #temp {
+    font-size: 2.75rem;
+  }
+  
+  #description {
+    font-size: 0.9rem;
+  }
+  
+  .btc-price-value {
+    font-size: 1rem;
+  }
+  
+  .btc-title {
+    font-size: 0.9rem;
+  }
+  
+  .btc-chip {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  /* --- 6. Settings Panel (FIX) --- */
+  /* Make the settings panel full-screen and fix overflow */
+  .settings-panel {
+    width: 100%;
+    max-width: 100vw;
+    border-left: none;
+    border-radius: 0;
+    /* This new line prevents padding from making the panel wider than the screen */
+    box-sizing: border-box; 
+  }
+}
+.settings-panel {
+  position: fixed;
+  top: 0;
+  right: 0; /* Anchor the panel to the right edge of the screen */
+  width: 420px;
+  max-width: 95vw;
+  height: 100%;
+  background: rgba(32, 30, 30, 0.55);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: -16px 0 40px rgba(0, 0, 0, 0.45);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  z-index: 1000;
+  overflow-y: auto;
+  
+  /* Use transform to move the panel off-screen */
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Active state: slide it back into view */
+.settings-panel.active {
+  transform: translateX(0);
+}
+
+/* You can now safely remove the old @keyframes slideIn animation rule if you want, as the transition handles everything. */
+
+
+/* =========================================================
+   FIX: Mobile Shortcut Layout (Only 2 Visible)
+   ========================================================= */
+
+@media screen and (max-width: 768px) {
+  /* This code hides all shortcuts by default on mobile... */
+  .shortcuts a {
+    display: none;
+  }
+  
+  /* ...and then specifically shows only the first two. */
+  .shortcuts a:nth-child(1),
+  .shortcuts a:nth-child(2) {
+    display: flex; /* Use 'flex' to match the button's original display type */
+  }
+}
