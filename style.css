@@ -1918,3 +1918,97 @@
     display: flex; /* Use 'flex' to match the button's original display type */
   }
 }
+/* =========================================================
+   BACKGROUND PRESETS
+   ========================================================= */
+.bg-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 per row */
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.bg-preset {
+  aspect-ratio: 16 / 9; /* Wide shape like a screen */
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.bg-preset:hover {
+  transform: scale(1.05);
+  border-color: var(--on-surface-variant);
+  z-index: 1;
+}
+
+.bg-preset:active {
+  transform: scale(0.95);
+}
+
+/* Optional: Outline the active preset if you want to add JS for it */
+.bg-preset.active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-container);
+}
+
+/* =========================================================
+   BACKGROUND PRESETS
+   ========================================================= */
+.bg-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 per row */
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.bg-preset {
+  aspect-ratio: 16 / 9; /* Wide shape like a screen */
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.bg-preset:hover {
+  transform: scale(1.05);
+  border-color: var(--on-surface-variant);
+  z-index: 1;
+}
+
+.bg-preset:active {
+  transform: scale(0.95);
+}
+
+/* Optional: Outline the active preset if you want to add JS for it */
+.bg-preset.active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-container);
+}
+/* Optional: Center checkmark when active */
+.bg-preset.active::after {
+  content: "check";
+  font-family: "Material Icons Round";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--primary);
+  color: var(--on-primary);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}

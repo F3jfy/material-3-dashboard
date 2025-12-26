@@ -1,161 +1,149 @@
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Home</title>
-    <link rel="stylesheet" href="style.css"/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="logo.png">
+  <link rel="icon" type="image/png" href="logo.png">
+</head>
+<body>
 
-  </head>
-  <body>
-    
+  <header>
+    <h2 id="greeting">Hello</h2>
+    <div id="time"></div>
+  </header>
+  <a href="https://adamfejfar.com" target="_blank" id="site-credit">adamfejfar.com</a>
 
-    <header>
-      <h2 id="greeting">Hello</h2>
-      <div id="time"></div>
-    </header>
-    <a href="https://adamfejfar.com" target="_blank" id="site-credit">adamfejfar.com</a>
+  <div class="grid-container">
+    <div class="card shortcuts-card">
+      <div class="shortcuts-header">
+        <h3>Shortcuts</h3>
+        <button id="edit-shortcuts" class="m3-icon-button" title="Edit shortcuts">
+          <span class="material-icons-round">edit</span>
+        </button>
+      </div>
 
-    <div class="grid-container">
-  <div class="card shortcuts-card">
-    <div class="shortcuts-header">
-      <h3>Shortcuts</h3>
-      <button id="edit-shortcuts" class="m3-icon-button" title="Edit shortcuts">
-        <span class="material-icons-round">edit</span>
-      </button>
+      <div class="shortcuts" id="shortcuts-list">
+        <a href="https://youtube.com" class="m3-button" data-id="youtube">
+          <img src="yt.svg" alt="YouTube" class="shortcut-icon"/>
+          <span class="shortcut-name">YouTube</span>
+        </a>
+
+        <a href="https://chat.openai.com" class="m3-button" data-id="chatgpt">
+          <img src="chat.svg" alt="ChatGPT" class="shortcut-icon"/>
+          <span class="shortcut-name">ChatGPT</span>
+        </a>
+
+        <a href="https://gemini.google.com" class="m3-button" data-id="gemini">
+          <img src="gemini.svg" alt="Gemini" class="shortcut-icon"/>
+          <span class="shortcut-name">Gemini</span>
+        </a>
+
+        <a href="https://instagram.com" class="m3-button" data-id="instagram">
+          <img src="instagram.svg" alt="Instagram" class="shortcut-icon"/>
+          <span class="shortcut-name">Instagram</span>
+        </a>
+
+        <a href="https://github.com" class="m3-button" data-id="github">
+          <img src="github.svg" alt="GitHub" class="shortcut-icon"/>
+          <span class="shortcut-name">GitHub</span>
+        </a>
+
+        <a href="https://dash.cloudflare.com" class="m3-button" data-id="cloudflare">
+          <img src="cloudflare.svg" alt="Cloudflare" class="shortcut-icon"/>
+          <span class="shortcut-name">Cloudflare</span>
+        </a>
+      </div>
     </div>
 
-    <div class="shortcuts" id="shortcuts-list">
-      <!-- Make sure each <a> has: data-id, <img>, and <span class="shortcut-name"> -->
-      <a href="https://youtube.com"  class="m3-button" data-id="youtube">
-        <img src="yt.svg" alt="YouTube" class="shortcut-icon"/>
-        <span class="shortcut-name">YouTube</span>
-      </a>
+    <div id="shortcut-editor" class="editor-modal hidden" aria-hidden="true">
+      <div class="editor-content" role="dialog" aria-modal="true" aria-labelledby="editor-title">
+        <h3 id="editor-title">Edit Shortcut</h3>
 
-      <a href="https://chat.openai.com"  class="m3-button" data-id="chatgpt">
-        <img src="chat.svg" alt="ChatGPT" class="shortcut-icon"/>
-        <span class="shortcut-name">ChatGPT</span>
-      </a>
+        <label class="editor-row">
+          <span>Name</span>
+          <input id="edit-name" type="text" placeholder="My Site">
+        </label>
 
-      <a href="https://gemini.google.com"  class="m3-button" data-id="gemini">
-        <img src="gemini.svg" alt="Gemini" class="shortcut-icon"/>
-        <span class="shortcut-name">Gemini</span>
-      </a>
+        <label class="editor-row">
+          <span>Link</span>
+          <input id="edit-link" type="url" placeholder="https://example.com">
+        </label>
 
-      <a href="https://instagram.com"  class="m3-button" data-id="instagram">
-        <img src="instagram.svg" alt="Instagram" class="shortcut-icon"/>
-        <span class="shortcut-name">Instagram</span>
-      </a>
+        <div class="editor-row">
+          <span>Icon</span>
+          <div class="icon-edit">
+            <img id="edit-preview" class="shortcut-icon" alt="Icon preview" />
+            <label class="custom-file-upload">
+              Upload Icon
+              <input type="file" id="edit-file" accept="image/*">
+            </label>
+            <input id="edit-img-url" type="url" placeholder="or paste image URL">
+          </div>
+        </div>
 
-      <a href="https://github.com"  class="m3-button" data-id="github">
-        <img src="github.svg" alt="GitHub" class="shortcut-icon"/>
-        <span class="shortcut-name">GitHub</span>
-      </a>
-
-      <a href="https://dash.cloudflare.com"  class="m3-button" data-id="cloudflare">
-        <img src="cloudflare.svg" alt="Cloudflare" class="shortcut-icon"/>
-        <span class="shortcut-name">Cloudflare</span>
-      </a>
-    </div>
-  </div>
-
-  <!-- Editor modal -->
-  <div id="shortcut-editor" class="editor-modal hidden" aria-hidden="true">
-    <div class="editor-content" role="dialog" aria-modal="true" aria-labelledby="editor-title">
-      <h3 id="editor-title">Edit Shortcut</h3>
-
-      <label class="editor-row">
-        <span>Name</span>
-        <input id="edit-name" type="text" placeholder="My Site">
-      </label>
-
-      <label class="editor-row">
-        <span>Link</span>
-        <input id="edit-link" type="url" placeholder="https://example.com">
-      </label>
-
-      <div class="editor-row">
-        <span>Icon</span>
-        <div class="icon-edit">
-          <img id="edit-preview" class="shortcut-icon" alt="Icon preview" />
-          <label class="custom-file-upload">
-            Upload Icon
-            <input type="file" id="edit-file" accept="image/*">
-          </label>
-          <input id="edit-img-url" type="url" placeholder="or paste image URL">
+        <div class="editor-actions">
+          <button id="editor-save" class="m3-icon-button"><span class="material-icons-round">check</span></button>
+          <button id="editor-cancel" class="m3-icon-button"><span class="material-icons-round">close</span></button>
         </div>
       </div>
-
-      <div class="editor-actions">
-        <button id="editor-save" class="m3-icon-button"><span class="material-icons-round">check</span></button>
-        <button id="editor-cancel" class="m3-icon-button"><span class="material-icons-round">close</span></button>
-      </div>
     </div>
-  </div>
 
+    <div class="card todo-card">
+      <h3>To-Do List</h3>
+      <div class="todo-input">
+        <input type="text" id="todo-text" placeholder="Add a new task" />
+        <button id="add-todo" class="m3-icon-button">
+          <span class="material-icons-round">add</span>
+        </button>
+      </div>
+      <ul id="todo-list"></ul>
+    </div>
 
-
-      <div class="card todo-card">
-        <h3>To-Do List</h3>
-        <div class="todo-input">
-          <input type="text" id="todo-text" placeholder="Add a new task" />
-          <button id="add-todo" class="m3-icon-button">
-            <span class="material-icons-round">add</span>
-          </button>
+    <div class="card weather-card">
+      <div id="weather-top">
+        <div id="weather-main">
+          <img id="weather-icon" src="http://openweathermap.org/img/wn/01d@2x.png" alt="weather icon" />
+          <div id="temp">-</div>
         </div>
-        <ul id="todo-list"></ul>
+        <div id="description">loading...</div>
+        <div id="location">Prague</div>
       </div>
- <div class="card weather-card">
-  <div id="weather-top">
-    <div id="weather-main">
-      <img id="weather-icon" src="http://openweathermap.org/img/wn/01d@2x.png" alt="weather icon" />
-      <div id="temp">-</div>
+
+      <div id="btc-bottom">
+        <span class="material-icons-round btc-icon" aria-hidden="true">currency_bitcoin</span>
+        <div class="btc-meta">
+          <div class="btc-title">Bitcoin (BTC)</div>
+          <div class="btc-sub" id="btc-updated">Just now</div>
+        </div>
+        <div class="btc-right">
+          <span id="btc-price" class="btc-price-value">-</span>
+          <span id="btc-change" class="btc-chip gain">-</span>
+        </div>
+      </div>
     </div>
-    <div id="description">loading...</div>
-    <!-- NEW: City label -->
-    <div id="location">Prague</div>
+
   </div>
 
-  <div id="btc-bottom">
-    <span class="material-icons-round btc-icon" aria-hidden="true">currency_bitcoin</span>
-    <div class="btc-meta">
-      <div class="btc-title">Bitcoin (BTC)</div>
-      <div class="btc-sub" id="btc-updated">Just now</div>
-    </div>
-    <div class="btc-right">
-      <span id="btc-price" class="btc-price-value">-</span>
-      <span id="btc-change" class="btc-chip gain">-</span>
-    </div>
-  </div>
-</div>
-
-      
-  </div>
-
-
-    
- <div class="search-container">
+  <div class="search-container">
     <form id="search-form" action="https://www.google.com/search" method="get" target="_blank">
-        <div class="input-wrapper" id="input-wrapper">
-            <span class="material-icons-round">search</span>
-            <input type="text" id="search-input" name="q" autocomplete="off" placeholder="Search Google">
-        </div>
+      <div class="input-wrapper" id="input-wrapper">
+        <span class="material-icons-round">search</span>
+        <input type="text" id="search-input" name="q" autocomplete="off" placeholder="Search Google">
+      </div>
     </form>
     <ul id="suggestions-box"></ul>
-</div>
+  </div>
 
-
-  <!-- Settings Button -->
   <button id="open-settings" class="m3-icon-button" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
     <span class="material-icons-round">settings</span>
   </button>
 
-  <!-- Settings Side Panel -->
   <div id="settings-panel" class="settings-panel">
     <div class="settings-header">
       <h3>Settings</h3>
@@ -164,110 +152,118 @@
       </button>
     </div>
 
-  <div class="settings-section">
-    <label>Color Scheme</label>
-    <div class="color-swatches">
-  <button class="swatch" data-theme="red" style="--swatch:#B3261E"></button>
-  <button class="swatch" data-theme="orange" style="--swatch:#9C4221"></button>
-  <button class="swatch" data-theme="amber" style="--swatch:#7D5800"></button>
-  <button class="swatch" data-theme="lime" style="--swatch:#5A6301"></button>
-  <button class="swatch" data-theme="green" style="--swatch:#006E1C"></button>
-  <button class="swatch" data-theme="teal" style="--swatch:#006A6A"></button>
-  <button class="swatch" data-theme="cyan" style="--swatch:#006A7F"></button>
-  <button class="swatch" data-theme="light-blue" style="--swatch:#0061A4"></button>
-  <button class="swatch" data-theme="blue" style="--swatch:#0061A4"></button>
-  <button class="swatch" data-theme="indigo" style="--swatch:#1E3A8A"></button>
-  <button class="swatch" data-theme="deep-purple" style="--swatch:#5E35B1"></button>
-  <button class="swatch" data-theme="purple" style="--swatch:#6750A4"></button>
-  <button class="swatch" data-theme="pink" style="--swatch:#9A4058"></button>
-  <button class="swatch" data-theme="rose" style="--swatch:#C62C4F"></button>
-  <button class="swatch" data-theme="brown" style="--swatch:#5D4037"></button>
-  <button class="swatch" data-theme="gray" style="--swatch:#6E6E6E"></button>
-  <button class="swatch" data-theme="blue-gray" style="--swatch:#607D8B"></button>
-  <button class="swatch" data-theme="navy" style="--swatch:#0D47A1"></button>
-  <button class="swatch" data-theme="forest-green" style="--swatch:#1B5E20"></button>
-  <button class="swatch" data-theme="teal-alt" style="--swatch:#00897B"></button>
-</div>
-
-  </div>
-<!-- Backup & Restore -->
-<div class="settings-section">
-  <h3>Backup & Restore</h3>
-  <div class="api-buttons centered">
-    <button id="export-settings" class="m3-button">Export Settings</button>
-    <label for="import-settings" class="custom-file-upload">Import Settings</label>
-    <input type="file" id="import-settings" accept=".json" style="display:none" />
-  </div>
-</div>
-
-<!-- Keyboard Shortcuts Help -->
-<div class="settings-section">
-  <h3>Keyboard Shortcuts</h3>
-  <p class="muted">Press <kbd>?</kbd> anytime to view available shortcuts.</p>
-  <button id="open-shortcuts" class="m3-button">View Shortcuts</button>
-</div>
-
-  <div class="settings-section">
-  <label>Background Image</label>
-  <div class="background-controls" id="bg-dropzone">
-    <!-- New Upload Icon (hidden once preview is shown) -->
-    <div id="bg-empty-icon">
-      <span class="material-icons-round">cloud_upload</span>
-      <p>Drop image or choose file</p>
+    <div class="settings-section">
+      <label>Color Scheme</label>
+      <div class="color-swatches">
+        <button class="swatch" data-theme="red" style="--swatch:#B3261E"></button>
+        <button class="swatch" data-theme="orange" style="--swatch:#9C4221"></button>
+        <button class="swatch" data-theme="amber" style="--swatch:#7D5800"></button>
+        <button class="swatch" data-theme="lime" style="--swatch:#5A6301"></button>
+        <button class="swatch" data-theme="green" style="--swatch:#006E1C"></button>
+        <button class="swatch" data-theme="teal" style="--swatch:#006A6A"></button>
+        <button class="swatch" data-theme="cyan" style="--swatch:#006A7F"></button>
+        <button class="swatch" data-theme="light-blue" style="--swatch:#0061A4"></button>
+        <button class="swatch" data-theme="blue" style="--swatch:#0061A4"></button>
+        <button class="swatch" data-theme="indigo" style="--swatch:#1E3A8A"></button>
+        <button class="swatch" data-theme="deep-purple" style="--swatch:#5E35B1"></button>
+        <button class="swatch" data-theme="purple" style="--swatch:#6750A4"></button>
+        <button class="swatch" data-theme="pink" style="--swatch:#9A4058"></button>
+        <button class="swatch" data-theme="rose" style="--swatch:#C62C4F"></button>
+        <button class="swatch" data-theme="brown" style="--swatch:#5D4037"></button>
+        <button class="swatch" data-theme="gray" style="--swatch:#6E6E6E"></button>
+        <button class="swatch" data-theme="blue-gray" style="--swatch:#607D8B"></button>
+        <button class="swatch" data-theme="navy" style="--swatch:#0D47A1"></button>
+        <button class="swatch" data-theme="forest-green" style="--swatch:#1B5E20"></button>
+        <button class="swatch" data-theme="teal-alt" style="--swatch:#00897B"></button>
+      </div>
     </div>
 
-    <label class="custom-file-upload">
-      Choose File
-      <input type="file" id="bg-upload" accept="image/*">
-    </label>
+    <div class="settings-section">
+      <h3>Backup & Restore</h3>
+      <div class="api-buttons centered">
+        <button id="export-settings" class="m3-button">Export Settings</button>
+        <label for="import-settings" class="custom-file-upload">Import Settings</label>
+        <input type="file" id="import-settings" accept=".json" style="display:none" />
+      </div>
+    </div>
 
-    <div id="bg-preview" class="hidden">
-      <img id="bg-thumb" src="" alt="Preview">
-      <span id="bg-name"></span>
+    <div class="settings-section">
+      <h3>Keyboard Shortcuts</h3>
+      <p class="muted">Press <kbd>?</kbd> anytime to view available shortcuts.</p>
+      <button id="open-shortcuts" class="m3-button">View Shortcuts</button>
+    </div>
+
+    <div class="settings-section">
+      <label>Background Image</label>
+
+      <p class="muted" style="margin-bottom: 0.5rem; font-size: 0.85rem;">Select Preset</p>
+      <div class="bg-presets-grid">
+        <button class="bg-preset" onclick="setPresetBg('1')" style="background-image: url('backgrounds/1.webp')"></button>
+        <button class="bg-preset" onclick="setPresetBg('2')" style="background-image: url('backgrounds/2.webp')"></button>
+        <button class="bg-preset" onclick="setPresetBg('3')" style="background-image: url('backgrounds/3.webp')"></button>
+        <button class="bg-preset" onclick="setPresetBg('4')" style="background-image: url('backgrounds/4.webp')"></button>
+        <button class="bg-preset" onclick="setPresetBg('5')" style="background-image: url('backgrounds/5.webp')"></button>
+        <button class="bg-preset" onclick="setPresetBg('6')" style="background-image: url('backgrounds/6.webp')"></button>
+        <button class="bg-preset" onclick="setPresetBg('7')" style="background-image: url('backgrounds/7.webp')"></button>
+        <button class="bg-preset" onclick="setPresetBg('8')" style="background-image: url('backgrounds/8.webp')"></button>
+      </div>
+
+      <p class="muted" style="margin: 1rem 0 0.5rem; font-size: 0.85rem;">Or Upload Custom</p>
+      <div class="background-controls" id="bg-dropzone">
+        <div id="bg-empty-icon">
+          <span class="material-icons-round">cloud_upload</span>
+          <p>Drop image or choose file</p>
+        </div>
+
+        <label class="custom-file-upload">
+          Choose File
+          <input type="file" id="bg-upload" accept="image/*">
+        </label>
+
+        <div id="bg-preview" class="hidden">
+          <img id="bg-thumb" src="" alt="Preview">
+          <span id="bg-name"></span>
+        </div>
+      </div>
+      <button id="remove-bg">Remove Background</button>
+    </div>
+
+    <div class="settings-section api-section">
+      <h3>API Keys</h3>
+      <div class="api-inputs">
+        <label>
+          WEATHER API KEY
+          <input type="text" id="weather-api-key" placeholder="Paste your key(openweather)">
+        </label>
+        <label>
+          CRYPTO API KEY
+          <input type="text" id="crypto-api-key" placeholder="Paste your key(mobula )">
+        </label>
+      </div>
+      <div class="api-buttons">
+        <button id="save-api-keys" class="m3-button">SAVE</button>
+        <button id="reset-api-keys" class="m3-button danger">RESET</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="shortcuts-modal" class="hidden">
+    <div class="modal-content">
+      <h3>Keyboard Shortcuts</h3>
+      <ul>
+        <li><kbd>/</kbd> Focus Search</li>
+        <li><kbd>T</kbd> Add To-Do</li>
+        <li><kbd>S</kbd> Open Settings</li>
+        <li><kbd>?</kbd> Show this list</li>
+      </ul>
+
+      <button id="close-shortcuts" class="m3-button">Close</button>
     </div>
   </div>
-  <button id="remove-bg">Remove Background</button>
-</div>
 
-  <div class="settings-section api-section">
-  <h3>API Keys</h3>
-  <div class="api-inputs">
-    <label>
-      WEATHER API KEY
-      <input type="text" id="weather-api-key" placeholder="Paste your key(openweather)">
-    </label>
-    <label>
-      CRYPTO API KEY
-      <input type="text" id="crypto-api-key" placeholder="Paste your key(mobula )">
-    </label>
-  </div>
-  <div class="api-buttons">
-    <button id="save-api-keys" class="m3-button">SAVE</button>
-    <button id="reset-api-keys" class="m3-button danger">RESET</button>
-  </div>
-</div>
+  <script src="script.js"></script>
+  <script src="search.js"></script>
 
-</div>
- 
-  <!-- Keyboard Shortcuts Modal -->
-<div id="shortcuts-modal" class="hidden">
-  <div class="modal-content">
-    <h3>Keyboard Shortcuts</h3>
-    <ul>
-  <li><kbd>/</kbd> Focus Search</li>
-  <li><kbd>T</kbd> Add To-Do</li>
-  <li><kbd>S</kbd> Open Settings</li>
-  <li><kbd>?</kbd> Show this list</li>
-</ul>
-
-    <button id="close-shortcuts" class="m3-button">Close</button>
-  </div>
-</div>
-
-
-
-    <script src="script.js"></script>
-    <script src="search.js"></script>
-    
-  </body>
-  </html>
+</body>
+</html>
