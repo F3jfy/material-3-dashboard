@@ -1,770 +1,571 @@
-  /* M3 Color Palette (derived from your red #ff6659) */
- :root {
-  /* Default (purple base) */
-  --primary: #6750A4;
-  --on-primary: #FFFFFF;
-  --primary-container: #EADDFF;
-  --on-primary-container: #21005E;
-  --error: #ff5449;
-  
-  --secondary: #625B71;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #E8DEF8;
-  --on-secondary-container: #1D192B;
+/* =========================================================
+   Material 3 Expressive — Pixel-style dashboard (dark)
+   ---------------------------------------------------------
+   Design language:
+   - Material You: every surface is tinted by the accent hue
+   - The clock is the hero; it and the weather sit bare on the
+     wallpaper, with no card around them
+   - The shortcut tiles are the signature: filled with the accent,
+     and the only thing whose shape morphs on interaction
+   - Everything else stays still: state layers and ripples only
+   ========================================================= */
 
-  --surface-dim: #141218;
-  --surface: #141218;
-  --surface-bright: #3B383E;
-  --surface-container-lowest: #0F0D13;
-  --surface-container-low: #1D1B20;
-  --surface-container: #211F26;
-  --surface-container-high: #2B2930;
-  --surface-container-highest: #36343B;
+:root {
+  /* Accent = M3 dark-scheme primary (tone 80). Everything else
+     is derived from it, so all 20 themes stay tonal. */
+  --accent: #D0BCFF;
 
-  --on-surface: #E6E0E9;
-  --on-surface-variant: #CAC4D0;
-  --outline: #938F99;
-  --outline-variant: #49454F;
+  /* Neutral spine of the dark scheme */
+  --neutral-0: #000000;
+  --neutral-6: #131318;
+  --neutral-10: #1D1B20;
+  --neutral-20: #322F35;
+  --neutral-90: #E6E0E9;
+  --neutral-95: #F5EFF7;
 
-  --font-family: 'Roboto Flex', 'Segoe UI', system-ui, sans-serif;
-  --font-display: 700 2.75rem/1.2 var(--font-family);
-  --font-headline: 600 2rem/1.3 var(--font-family);
-  --font-title: 500 1.25rem/1.4 var(--font-family);
-  --font-label: 500 0.9rem/1.4 var(--font-family);
-  --font-body: 400 1rem/1.6 var(--font-family);
+  /* ---- M3 tonal roles, derived from --accent ---- */
+  --primary: var(--accent);
+  --on-primary: color-mix(in srgb, var(--accent) 24%, var(--neutral-0));
+  --primary-container: color-mix(in srgb, var(--accent) 34%, var(--neutral-6));
+  --on-primary-container: color-mix(in srgb, var(--accent) 82%, var(--neutral-95));
+
+  --secondary: color-mix(in srgb, var(--accent) 62%, var(--neutral-90));
+  --on-secondary: color-mix(in srgb, var(--accent) 20%, var(--neutral-0));
+  --secondary-container: color-mix(in srgb, var(--accent) 22%, var(--neutral-10));
+  --on-secondary-container: color-mix(in srgb, var(--accent) 70%, var(--neutral-95));
+
+  --error: #FFB4AB;
+  --on-error: #690005;
+  --error-container: color-mix(in srgb, #FFB4AB 30%, var(--neutral-6));
+
+  /* Surfaces — neutrals gently tinted with the accent (Material You) */
+  --surface: color-mix(in srgb, var(--accent) 5%, var(--neutral-6));
+  --surface-dim: color-mix(in srgb, var(--accent) 4%, #101014);
+  --surface-bright: color-mix(in srgb, var(--accent) 8%, #38353D);
+  --surface-container-lowest: color-mix(in srgb, var(--accent) 4%, #0E0E13);
+  --surface-container-low: color-mix(in srgb, var(--accent) 6%, var(--neutral-10));
+  --surface-container: color-mix(in srgb, var(--accent) 8%, #211F26);
+  --surface-container-high: color-mix(in srgb, var(--accent) 10%, #2B2930);
+  --surface-container-highest: color-mix(in srgb, var(--accent) 12%, #36343B);
+
+  --on-surface: var(--neutral-90);
+  --on-surface-variant: color-mix(in srgb, var(--accent) 20%, #CAC4D0);
+  --outline: color-mix(in srgb, var(--accent) 18%, #938F99);
+  --outline-variant: color-mix(in srgb, var(--accent) 14%, #49454F);
+
+  /* Translucent surfaces, so the wallpaper reads through — Android leans on
+     these for quick settings, the search pill and the notification shade. */
+  --scrim-surface: color-mix(in srgb, var(--surface-container-high) 42%, transparent);
+  --scrim-surface-high: color-mix(in srgb, var(--surface-container-high) 52%, transparent);
+
+  /* A hairline edge keeps translucent surfaces legible over a busy wallpaper */
+  --edge: inset 0 0 0 1px color-mix(in srgb, var(--on-surface) 9%, transparent);
+
+  /* Wallpaper tones: the accent is a pale tone-80, which turns to mud when
+     mixed into near-black. So borrow only its hue and rebuild it at full
+     chroma — the same trick Material You uses to extract a palette. */
+  --wall-a: oklch(from var(--accent) 0.56 0.20 h);
+  --wall-b: oklch(from var(--accent) 0.46 0.18 calc(h + 42));
+  --wall-c: oklch(from var(--accent) 0.40 0.16 calc(h - 48));
+  --wall-a-fade: oklch(from var(--wall-a) l c h / 0);
+  --wall-b-fade: oklch(from var(--wall-b) l c h / 0);
+  --wall-c-fade: oklch(from var(--wall-c) l c h / 0);
+
+  /* ---- Expressive shape ---- */
+  --r-xs: 8px;
+  --r-s: 12px;
+  --r-m: 16px;
+  --r-l: 20px;
+  --r-xl: 28px;
+  --r-xxl: 36px;
+  --r-full: 999px;
+
+  /* ---- Shortcut grid (driven by the Settings sliders) ----
+     The whole stack's width derives from these, so the search bar always
+     spans exactly as wide as one full row of shortcuts. */
+  --sc-cols: 6;               /* shortcuts per row */
+  --sc-gap: 16px;             /* space between them */
+  --sc-cell: 76px;            /* one shortcut cell (66px disc + breathing room) */
+  --stack-width: calc(var(--sc-cols) * var(--sc-cell) + (var(--sc-cols) - 1) * var(--sc-gap));
+
+  /* ---- Expressive motion ---- */
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---- Elevation ---- */
+  --elev-1: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.15);
+  --elev-2: 0 2px 6px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
+  --elev-3: 0 4px 12px rgba(0, 0, 0, 0.35), 0 16px 40px rgba(0, 0, 0, 0.3);
+
+  /* ---- Type ---- */
+  --font-family: "Roboto Flex", "Roboto", "Google Sans", system-ui, -apple-system, sans-serif;
+  --font-display-face: "Outfit", "Google Sans", "Roboto Flex", system-ui, sans-serif;
+  --font-mono: ui-monospace, "Roboto Mono", monospace;
+
+  --font-display: 700 3.5rem/1 var(--font-family);
+  --font-headline: 600 1.5rem/1.3 var(--font-family);
+  --font-title: 600 1rem/1.4 var(--font-family);
+  --font-label: 500 0.875rem/1.4 var(--font-family);
+  --font-body: 400 0.9375rem/1.5 var(--font-family);
 }
 
-/* 1. Red */
-[data-theme="red"] {
-  --primary: #B3261E;
-  --on-primary: #FFFFFF;
-  --primary-container: #F9DEDC;
-  --on-primary-container: #410E0B;
+/* =========================================================
+   ACCENT THEMES — M3 dark primaries (tone 80)
+   ========================================================= */
+[data-theme="red"]          { --accent: #FFB4AB; }
+[data-theme="orange"]       { --accent: #FFB77C; }
+[data-theme="amber"]        { --accent: #F3C03F; }
+[data-theme="lime"]         { --accent: #CBEB7A; }
+[data-theme="green"]        { --accent: #6DD58C; }
+[data-theme="teal"]         { --accent: #4FD8D2; }
+[data-theme="cyan"]         { --accent: #4FD8EB; }
+[data-theme="light-blue"]   { --accent: #8BD0F0; }
+[data-theme="blue"]         { --accent: #A8C7FA; }
+[data-theme="indigo"]       { --accent: #BBC3FF; }
+[data-theme="deep-purple"]  { --accent: #C4C0FF; }
+[data-theme="purple"]       { --accent: #D0BCFF; }
+[data-theme="pink"]         { --accent: #FFB1C8; }
+[data-theme="rose"]         { --accent: #FFB2BC; }
+[data-theme="brown"]        { --accent: #E7BDB0; }
+[data-theme="gray"]         { --accent: #C7C6CA; }
+[data-theme="blue-gray"]    { --accent: #BAC8DB; }
+[data-theme="navy"]         { --accent: #AEC6FF; }
+[data-theme="forest-green"] { --accent: #9BD5A0; }
+[data-theme="teal-alt"]     { --accent: #82D5CB; }
+[data-theme="coral"]        { --accent: #FFB59B; }
+[data-theme="magenta"]      { --accent: #FFA8EF; }
+[data-theme="sand"]         { --accent: #E8D3A5; }
+[data-theme="olive"]        { --accent: #C8CC86; }
+[data-theme="emerald"]      { --accent: #6FDDB0; }
 
-  --secondary: #775652;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #FFDAD6;
-  --on-secondary-container: #2C1512;
+/* ---------------------------------------------------------
+   Monochrome themes. Every other theme derives its palette from
+   a pale tone-80 accent; these two sit at the ends of the scale,
+   so they pin the roles that derivation would get wrong.
+   --------------------------------------------------------- */
+[data-theme="white"] {
+  --accent: #FFFFFF;
+  --on-primary: #1B1B1F;
+  --primary-container: #3C3C43;
+  --on-primary-container: #EDEDF0;
+  --secondary-container: #2C2C32;
+  --on-secondary-container: #E6E6EA;
+
+  --wall-a: #4C4C55; --wall-a-fade: rgba(76, 76, 85, 0);
+  --wall-b: #313139; --wall-b-fade: rgba(49, 49, 57, 0);
+  --wall-c: #3E3E47; --wall-c-fade: rgba(62, 62, 71, 0);
 }
 
-/* 2. Orange */
-[data-theme="orange"] {
-  --primary: #9C4221;
-  --on-primary: #FFFFFF;
-  --primary-container: #FFDAD6;
-  --on-primary-container: #370E00;
+[data-theme="black"] {
+  --accent: #202024;
+  /* Dark circles, so the logos knock out to white */
+  --logo-filter: invert(1);
+  --on-primary: #F2F2F5;
+  --primary-container: #303036;
+  --on-primary-container: #E8E8EC;
+  --secondary-container: #26262C;
+  --on-secondary-container: #E4E4E8;
+  --on-surface-variant: #B8B8C0;
+  --outline-variant: #3A3A42;
 
-  --secondary: #77574E;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #FFDAD6;
-  --on-secondary-container: #2C150F;
+  --wall-a: #35353D; --wall-a-fade: rgba(53, 53, 61, 0);
+  --wall-b: #1C1C22; --wall-b-fade: rgba(28, 28, 34, 0);
+  --wall-c: #2A2A31; --wall-c-fade: rgba(42, 42, 49, 0);
 }
 
-/* 3. Amber (Yellow) */
-[data-theme="amber"] {
-  --primary: #7D5800;
-  --on-primary: #FFFFFF;
-  --primary-container: #FFE8A4;
-  --on-primary-container: #231C00;
+/* =========================================================
+   BASE
+   ========================================================= */
+* { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
-  --secondary: #6B5F2F;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #EDE3B0;
-  --on-secondary-container: #1E1C05;
-}
-
-/* 4. Lime */
-[data-theme="lime"] {
-  --primary: #5A6301;
-  --on-primary: #FFFFFF;
-  --primary-container: #E8ED95;
-  --on-primary-container: #1D1F00;
-
-  --secondary: #6B653C;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #E8E5B1;
-  --on-secondary-container: #1E1D05;
-}
-
-/* 5. Green */
-[data-theme="green"] {
-  --primary: #006E1C;
-  --on-primary: #FFFFFF;
-  --primary-container: #95F991;
-  --on-primary-container: #002204;
-
-  --secondary: #52634F;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #D5E8CF;
-  --on-secondary-container: #111F0F;
-}
-
-/* 6. Teal */
-[data-theme="teal"] {
-  --primary: #006A6A;
-  --on-primary: #FFFFFF;
-  --primary-container: #71F7F7;
-  --on-primary-container: #002020;
-
-  --secondary: #4A6362;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #CDE8E7;
-  --on-secondary-container: #051F1F;
-}
-
-/* 7. Cyan */
-[data-theme="cyan"] {
-  --primary: #006A7F;
-  --on-primary: #FFFFFF;
-  --primary-container: #9FE9FF;
-  --on-primary-container: #001F26;
-
-  --secondary: #4A606D;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #CDE4EC;
-  --on-secondary-container: #051F24;
-}
-
-/* 8. Light Blue */
-[data-theme="light-blue"] {
-  --primary: #0061A4;
-  --on-primary: #FFFFFF;
-  --primary-container: #D0E4FF;
-  --on-primary-container: #001D36;
-
-  --secondary: #54637C;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #D7E3F8;
-  --on-secondary-container: #101C2B;
-}
-
-/* 9. Blue */
-[data-theme="blue"] {
-  --primary: #0061A4;
-  --on-primary: #FFFFFF;
-  --primary-container: #D0E4FF;
-  --on-primary-container: #001D36;
-
-  --secondary: #4E6079;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #D7E3F8;
-  --on-secondary-container: #091C2B;
-}
-
-/* 10. Indigo */
-[data-theme="indigo"] {
-  --primary: #1E3A8A;
-  --on-primary: #FFFFFF;
-  --primary-container: #D8DFFF;
-  --on-primary-container: #050F3C;
-
-  --secondary: #4C4F6A;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #D8D8F1;
-  --on-secondary-container: #0E0E24;
-}
-
-/* 11. Deep Purple */
-[data-theme="deep-purple"] {
-  --primary: #5E35B1;
-  --on-primary: #FFFFFF;
-  --primary-container: #E8DEFF;
-  --on-primary-container: #22005D;
-
-  --secondary: #6E5B7E;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #E8DEFF;
-  --on-secondary-container: #241E2E;
-}
-
-/* 12. Purple */
-[data-theme="purple"] {
-  --primary: #6750A4;
-  --on-primary: #FFFFFF;
-  --primary-container: #EADDFF;
-  --on-primary-container: #21005E;
-
-  --secondary: #625B71;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #E8DEF8;
-  --on-secondary-container: #1D192B;
-}
-
-/* 13. Pink */
-[data-theme="pink"] {
-  --primary: #9A4058;
-  --on-primary: #FFFFFF;
-  --primary-container: #FFD9E2;
-  --on-primary-container: #3E001D;
-
-  --secondary: #75565C;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #FFD9E2;
-  --on-secondary-container: #2C151B;
-}
-
-/* 14. Rose */
-[data-theme="rose"] {
-  --primary: #C62C4F;
-  --on-primary: #FFFFFF;
-  --primary-container: #FFDEE5;
-  --on-primary-container: #3E001E;
-
-  --secondary: #875E6E;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #FFDEE5;
-  --on-secondary-container: #2C151F;
-}
-
-/* 15. Brown */
-[data-theme="brown"] {
-  --primary: #5D4037;
-  --on-primary: #FFFFFF;
-  --primary-container: #EADDCA;
-  --on-primary-container: #221A17;
-
-  --secondary: #795548;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #EADDCA;
-  --on-secondary-container: #281A15;
-}
-
-/* 16. Grey */
-[data-theme="gray"] {
-  --primary: #6E6E6E;
-  --on-primary: #FFFFFF;
-  --primary-container: #E3E3E3;
-  --on-primary-container: #1D1D1D;
-
-  --secondary: #7E7E7E;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #E3E3E3;
-  --on-secondary-container: #1E1E1E;
-}
-
-/* 17. Blue-Grey */
-[data-theme="blue-gray"] {
-  --primary: #607D8B;
-  --on-primary: #FFFFFF;
-  --primary-container: #DCE4E8;
-  --on-primary-container: #0A1B21;
-
-  --secondary: #546775;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #D8E2E8;
-  --on-secondary-container: #0D1A232;
-}
-
-/* 18. Navy (added) */
-[data-theme="navy"] {
-  --primary: #0D47A1;
-  --on-primary: #FFFFFF;
-  --primary-container: #D1E3FF;
-  --on-primary-container: #001E39;
-
-  --secondary: #415363;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #D2DEE8;
-  --on-secondary-container: #0B1D28;
-}
-
-/* 19. Forest Green */
-[data-theme="forest-green"] {
-  --primary: #1B5E20;
-  --on-primary: #FFFFFF;
-  --primary-container: #B9F6CA;
-  --on-primary-container: #00210F;
-
-  --secondary: #3C6A31;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #D7ECD7;
-  --on-secondary-container: #0C1D11;
-}
-
-/* 20. Teal (alt) */
-[data-theme="teal-alt"] {
-  --primary: #00897B;
-  --on-primary: #FFFFFF;
-  --primary-container: #A7FFEB;
-  --on-primary-container: #00201E;
-
-  --secondary: #4E796F;
-  --on-secondary: #FFFFFF;
-  --secondary-container: #D1EDE7;
-  --on-secondary-container: #071E1B;
-}
-
-
-
-
-
-
-  body {
-      font: var(--font-body);
-    color: var(--on-surface);
-    background: var(--surface);
-    margin: 0;
-    color: var(--on-surface);
-    background-color: var(--surface-dim); /* Use a solid M3 surface color */
-    height: 100vh;
-    overflow-y: auto; /* Allow scrolling if content overflows */
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Center the grid vertically */
-    align-items: center; /* Center the grid horizontally */
-    padding: 2rem;
-    box-sizing: border-box;
-  }
-  h1 {
-    font: var(--font-display);
-    letter-spacing: -0.02em;
-  }
-
-  h2 {
-    font: var(--font-headline);
-    letter-spacing: -0.01em;
-  }
-
-  h3 {
-    font: var(--font-title);
-  }
-
-  /* Labels (buttons, form text) */
-  button, label {
-    font: var(--font-label);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  /* Header stays centered at the top */
-  header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-
-  #greeting {
-    font-size: 1.75rem; /* M3 Headline Small */
-    font-weight: 400;
-    color: var(--on-surface-variant);
-  }
-
-  #time {
-    font-size: 4rem; /* M3 Display Medium */
-    font-weight: 500;
-    line-height: 1;
-  }
-
-  /* The new grid container */
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    width: 100%;
-    max-width: 1200px;
-  }
-    .card {
-    background: rgba(33, 30, 29, 0.65); /* slightly softer transparency */
-    backdrop-filter: blur(16px); 
-    -webkit-backdrop-filter: blur(16px);
-    
-    border-radius: 1.25rem; /* smoother corners */
-    padding: 1.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.05); /* softer border */
-    
-    /* Subtle shadow for elevation */
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-
-    opacity: 0;
-    animation: card-enter 0.6s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
-  }
-
-  /* Stagger entry */
-  .grid-container .card:nth-child(1) { animation-delay: 0.1s; }
-  .grid-container .card:nth-child(2) { animation-delay: 0.2s; }
-  .grid-container .card:nth-child(3) { animation-delay: 0.3s; }
-
-  .card:hover {
-    background: rgba(33, 30, 29, 0.8);
-    transform: translateY(-6px); /* more lift */
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  }
-
-  /* Card titles */
-  .card h3 {
-    margin-top: 0;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--on-surface);
-    letter-spacing: 0.5px;
-    margin-bottom: 1rem;
-  }
-
-  .shortcuts {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 1rem;
-  }
-
-  .shortcut-icon {
-    width: 32px;   /* adjust size for all logos */
-    height: 32px;
-    object-fit: contain;
-    margin-bottom: 0.5rem;
-    transition: transform 0.2s ease, filter 0.2s ease;
-  }
-
-  .m3-button:hover .shortcut-icon {
-    transform: scale(1.15);     /* subtle pop */
-    filter: brightness(1.2);     /* slight glow effect */
-  }
-
-
-  /* M3 Filled Tonal Button Style */
-  /* M3 Filled Tonal Button Style */
-  .m3-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 1rem 0.5rem;
-    background-color: var(--secondary-container);
-    color: var(--on-secondary-container); 
-    border-radius: 1.5rem;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.875rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden; /* enables ripple clipping */
-    
-    /* -- NEW TRANSITIONS -- */
-    transition: transform 0.2s ease, background-color 0.2s ease;
-    will-change: transform; /* Performance optimization */
-  }
-
-  .m3-button:hover {
-    background-color: var(--secondary-container); /* Keep color consistent */
-    filter: brightness(0.9);
-    transform: translateY(-2px); /* Lift effect */
-  }
-
-  .m3-button:active {
-    transform: translateY(-1px) scale(0.95); /* Press effect */
-    filter: brightness(0.8);
-  }
-
-  .m3-button .material-icons-round {
-    font-size: 24px;
-  }
-
-/* To-Do input row */
-.todo-input {
-  display: flex;
-  align-items: center;   /* ensures input & button align vertically */
-  gap: 0.5rem;
-  margin-block: 1rem;
-}
-
-
-
-.todo-input input {
-  flex: 1;
-  flex-grow: 1;
-  padding: 0.9rem 1rem;
-  border-radius: 1rem;
-  border: 1px solid var(--outline-variant);
-  background: var(--surface-container-high);
-  font-size: 1rem;
+body {
+  font: var(--font-body);
   color: var(--on-surface);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
-}
-
-/* Placeholder */
-.todo-input input::placeholder {
-  color: var(--on-surface-variant);
-  opacity: 0.8;
-}
-
-/* Focus effect */
-.todo-input input:focus {
-  outline: none;
-  border-color: var(--primary);
-  background: var(--surface-container);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 30%, transparent);
-  transform: translateY(-1px);
-}
-/* Limit To-Do list height and make it scrollable */
-.todo-card {
+  margin: 0;
+  padding: 2rem;
+  box-sizing: border-box;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  max-height: 400px; /* adjust to fit your layout */
+  justify-content: center;
+  align-items: center;
+
+  /* Material You: the default wallpaper is built from the accent itself, and
+     gives the translucent surfaces something to pick up. Overridden inline
+     when a wallpaper is saved. */
+  background-color: #0B0A0F;
+  background-image:
+    radial-gradient(58% 60% at 78% 4%, var(--wall-a) 0%, var(--wall-a-fade) 74%),
+    radial-gradient(50% 52% at 4% 32%, var(--wall-c) 0%, var(--wall-c-fade) 76%),
+    radial-gradient(62% 58% at 28% 100%, var(--wall-b) 0%, var(--wall-b-fade) 74%),
+    radial-gradient(120% 105% at 50% 42%, transparent 42%, rgba(0, 0, 0, 0.42) 100%);
+  background-size: cover;
+  background-position: center;
+  transition: background-color 0.4s var(--ease-emphasized);
 }
 
-#todo-list {
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 0.25rem; /* space for scrollbar */
+::selection { background: var(--primary-container); color: var(--on-primary-container); }
+
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
 }
 
-/* Pixel-style scrollbar */
-#todo-list::-webkit-scrollbar {
-  width: 6px;
-}
-#todo-list::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 3px;
-}
-#todo-list::-webkit-scrollbar-track {
-  background: transparent;
+h1, h2, h3, p { margin: 0; }
+
+button, label {
+  font: var(--font-label);
+  text-transform: none;
+  letter-spacing: 0.01em;
 }
 
-  /* To-Do Item Animations */
-  @keyframes add-item {
-    from {
-      opacity: 0;
-      transform: translateX(-15px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--outline-variant); border-radius: var(--r-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--outline); }
 
-  @keyframes remove-item {
-    to {
-      opacity: 0;
-      transform: scale(0.8);
-      height: 0;
-      padding: 0;
-      margin: 0;
-    }
-  }
-
-  #todo-list li.adding {
-    animation: add-item 0.4s ease forwards;
-  }
-
-  #todo-list li.removing {
-    animation: remove-item 0.4s ease forwards;
-  }
-  /* M3 Icon Button Style */
-  .m3-icon-button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: transparent;
-    color: var(--primary);
-    border: 1px solid var(--outline);
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  .m3-icon-button:hover {
-    background: rgba(255, 218, 214, 0.1); /* on-primary-container with alpha */
-  }
-
-  /* To-Do List Items */
-  #todo-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  #todo-list li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem;
-    background-color: var(--surface-container-low);
-    border-radius: 0.75rem; /* M3 Small shape */
-  }
-
-  #todo-list li button { /* The 'delete' button */
-    background: none;
-    border: none;
-    color: var(--on-surface-variant);
-    cursor: pointer;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #todo-list li button:hover {
-    background-color: var(--surface-container-high);
-    color: var(--primary);
-  }
-
-
-/* --- NEW: Split Weather/BTC Card --- */
-
-/* 1. The main card container */
-.weather-card {
-  /* Remove padding to let the inner sections control spacing */
-  padding: 0;
-  /* This is crucial: it keeps the children's sharp corners inside the parent's rounded ones */
-  overflow: hidden; 
-  display: flex;
-  flex-direction: column;
+/* Material ripple */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  background: currentColor;
+  opacity: 0.18;
+  pointer-events: none;
+  animation: ripple-animation 600ms var(--ease-emphasized);
 }
-#location {
-  font-size: 0.9rem;
+
+@keyframes ripple-animation {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+#site-credit {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1100;
+  font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--on-surface-variant);
-  margin-top: 0.25rem;
   letter-spacing: 0.02em;
+  color: var(--on-surface-variant);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: var(--r-full);
+  background: var(--scrim-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: color 0.2s var(--ease-emphasized),
+              background 0.2s var(--ease-emphasized);
 }
 
+#site-credit:hover {
+  color: var(--on-primary-container);
+  background: var(--primary-container);
+}
 
-/* 2. The top weather section */
-#weather-top {
+.top-bar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1100;
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* =========================================================
+   DASHBOARD STACK
+   ========================================================= */
+/* One measure for the whole stack: six 96px tiles + five 12px gaps = 636px,
+   so the search bar lines up exactly with the ends of the tile row. */
+.dashboard {
+  width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  animation: rise 0.6s var(--ease-emphasized) backwards;
+}
+
+#greeting {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--on-surface-variant);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* The hero: the Pixel lock-screen clock is a geometric face, not Roboto —
+   Outfit is the closest free stand-in for Google Sans. */
+#time {
+  font-family: var(--font-display-face);
+  font-size: clamp(4.5rem, 13vw, 9rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--on-surface);
+  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* At a glance: date and weather as plain text on the wallpaper, no container */
+.glance-line {
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 1.5rem; /* More spacious padding */ 
-  transition: background-color 0.25s ease;
+  flex-wrap: wrap;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--on-surface-variant);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
 }
 
-/* 3. The bottom Bitcoin section */
-#btc-bottom {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem; /* Slightly less vertical padding for a single line of content */
-  transition: background-color 0.25s ease;
-}
+#date { font-weight: 500; }
 
-
-/* 5. Typography and Icon Refinements */
-#weather-main {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-#weather-main img {
-  width: 64px;
-  height: 64px;
+#weather-icon {
+  width: 34px;
+  height: 34px;
+  margin-right: -0.375rem;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
 }
 
 #temp {
-  font-size: 3.5rem; /* Slightly larger for more impact */
-  font-weight: 400;  /* M3 often uses lighter weights for large display text */
-  line-height: 1;    /* Tighten line height */
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  font-variant-numeric: tabular-nums;
 }
 
+/* The API returns "overcast clouds"; sentence case, not Title Case */
 #description {
-  text-transform: capitalize;
-  color: var(--on-surface-variant);
-  font-size: 1rem;
-  margin-top: -0.25rem; /* Nudge it slightly closer to the temp */
+  display: inline-block;
+  text-transform: none;
 }
 
-.btc-row {
-  /* This class is no longer needed for layout, so we clear its styles */
-  background: none;
+#description::first-letter { text-transform: uppercase; }
+
+.glance-dot { opacity: 0.45; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   SHORTCUTS — expressive tiles
+   ========================================================= */
+/* A grid whose width follows the slider settings, so it shares one measure
+   with the search bar and wraps into as many rows as the shortcuts need. */
+.shortcuts {
+  width: min(var(--stack-width), 100%);
+  display: grid;
+  grid-template-columns: repeat(var(--sc-cols), minmax(0, var(--sc-cell)));
+  justify-content: center;
+  /* Gap tracks the slider on desktop, but eases off on small screens */
+  gap: min(var(--sc-gap), 5vw);
+}
+
+/* The cell itself is invisible — the circle and label do the work */
+.m3-button {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0;
-  border-radius: 0;
-  /* We re-apply flex here so the simplified HTML works */
-  display: contents; 
+  background: none;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+
+  /* `backwards`, not `both`: a filled-forwards animation would keep pinning
+     transform at animation priority and kill the interactions below. */
+  animation: pop 0.5s var(--ease-spring) backwards;
 }
 
-.btc-icon { font-size: 28px; color: var(--primary); }
-.btc-meta { display: flex; flex-direction: column; min-width: 0; flex-grow: 1; }
-.btc-title { font-weight: 600; color: var(--on-surface); }
-.btc-sub { font-size: 0.8rem; color: var(--on-surface-variant); }
-
-.btc-right { display: flex; align-items: center; gap: 0.5rem; }
-.btc-price-value { font-size: 1.2rem; font-weight: 500; color: var(--on-surface); }
-
-.btc-chip {
-  font-size: 0.8rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 999px;
+/* The app icon: accent-filled circle, and the one thing that morphs.
+   Sized fluidly so it shrinks with the cell on tight screens. */
+.icon-disc {
+  position: relative;
+  overflow: hidden;
+  width: min(66px, 100%);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: var(--on-primary);
+  box-shadow: var(--elev-1), var(--edge);
+  transition: transform 0.35s var(--ease-spring),
+              border-radius 0.35s var(--ease-spring),
+              background 0.2s var(--ease-emphasized),
+              box-shadow 0.25s var(--ease-emphasized);
 }
-.btc-chip.gain { background: rgba(0, 200, 83, 0.18); color: #00c853; }
-.btc-chip.loss { background: rgba(244, 67, 54, 0.18); color: #f44336; }
-  /* Pixel-style entry animation */
-  @keyframes card-enter {
-    from {
-      opacity: 0;
-      transform: translateY(20px) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
 
-  /* --- Animated Orb Background --- */
+.m3-button:hover .icon-disc {
+  background: color-mix(in srgb, var(--accent) 88%, var(--neutral-95));
+  transform: translateY(-3px);
+  box-shadow: var(--elev-2);
+}
 
-  .background-container {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-    background: #300000; /* neutral gray fallback */
-    transition: background 1s ease; /* smooth theme changes */
-  }
+/* Press: the circle squashes and relaxes toward a squircle */
+.m3-button:active .icon-disc {
+  transform: scale(0.92);
+  border-radius: var(--r-l);
+  box-shadow: var(--elev-1);
+}
 
+.shortcuts a:nth-child(1) { animation-delay: 0.04s; }
+.shortcuts a:nth-child(2) { animation-delay: 0.08s; }
+.shortcuts a:nth-child(3) { animation-delay: 0.12s; }
+.shortcuts a:nth-child(4) { animation-delay: 0.16s; }
+.shortcuts a:nth-child(5) { animation-delay: 0.20s; }
+.shortcuts a:nth-child(6) { animation-delay: 0.24s; }
 
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.8) translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
 
-  .orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.55;
-    animation: move-orb ease-in-out infinite;
-    mix-blend-mode: screen;
-  }
+/* The logos are dark monochrome SVGs, so they read directly on the light
+   accent circle — the same way a Pixel icon's glyph sits on its background. */
+.shortcut-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  pointer-events: none;
+  /* The logos are solid black. On a dark accent (black theme) they'd vanish,
+     so those themes knock them out to white. */
+  filter: var(--logo-filter, none);
+}
 
-  @keyframes move-orb {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(-150px, 100px) scale(1.1); }
-    50% { transform: translate(100px, -150px) scale(0.9); }
-    75% { transform: translate(50px, 50px) scale(1.05); }
-  }
+/* The label sits on the wallpaper, so it needs its own legibility */
+.shortcut-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  color: var(--on-surface);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+  transition: color 0.2s var(--ease-emphasized);
+}
 
+/* Edit mode + drag & drop */
+.m3-button.editing {
+  cursor: grab;
+  animation: jiggle 0.35s ease-in-out infinite alternate;
+}
 
+.m3-button.editing .icon-disc {
+  outline: 2px dashed var(--on-primary);
+  outline-offset: -5px;
+}
 
+.m3-button.editing:active { cursor: grabbing; }
 
- /* === FINAL SEARCH STYLES (with animation) === */
+@keyframes jiggle {
+  from { transform: rotate(-1.2deg); }
+  to   { transform: rotate(1.2deg); }
+}
+
+.m3-button.dragging {
+  opacity: 0.45;
+  cursor: grabbing;
+  animation: none;
+}
+
+.m3-button.dragging .icon-disc {
+  transform: scale(1.08);
+  box-shadow: var(--elev-3);
+}
+
+/* Delete badge — only while editing */
+.sc-delete { display: none; }
+
+.shortcuts.editing .sc-delete {
+  position: absolute;
+  top: -3px;
+  right: calc(50% - min(66px, 100%) / 2 - 3px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--error);
+  color: var(--on-error);
+  cursor: pointer;
+  box-shadow: var(--elev-1);
+  z-index: 3;
+}
+
+.sc-delete .material-icons-round { font-size: 15px; }
+
+/* Add tile — a dashed circle that appears at the end of the row while editing */
+.add-shortcut { display: none; }
+
+.shortcuts.editing .add-shortcut { display: flex; }
+
+.add-disc {
+  width: min(66px, 100%);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-full);
+  border: 2px dashed var(--outline);
+  color: var(--on-surface-variant);
+  transition: border-color 0.2s var(--ease-emphasized), color 0.2s var(--ease-emphasized);
+}
+
+.add-shortcut:hover .add-disc { border-color: var(--accent); color: var(--accent); }
+.add-disc .material-icons-round { font-size: 26px; }
+
+/* =========================================================
+   SEARCH — Pixel search bar
+   ========================================================= */
 .search-container {
   position: relative;
-  width: 100%;
-  max-width: 1200px;
-  margin: 1.5rem auto 20px;
-  background: rgba(33, 30, 29, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 2rem;
-  border: 1px solid var(--outline-variant);
+  /* Matches one full row of shortcuts, so the two always line up */
+  width: min(var(--stack-width), 100%);
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  padding: 0.75rem 1.25rem;
   gap: 0.75rem;
-  transition: border-radius 0.2s ease-in-out;
+  padding: 0.875rem 1.5rem;
+
+  border-radius: var(--r-full);
+  background: var(--scrim-surface-high);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: var(--elev-1), var(--edge);
+  animation: rise 0.6s 0.1s var(--ease-emphasized) backwards;
+  transition: background 0.25s var(--ease-emphasized),
+              box-shadow 0.25s var(--ease-emphasized);
 }
 
-.search-container:has(#suggestions-box.visible) {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+.search-container:has(#search-input:focus) {
+  background: var(--surface-container-high);
+  box-shadow: var(--elev-2), var(--edge);
 }
 
-/* (The .input-wrapper and #search-input styles remain the same) */
+#search-form { flex-grow: 1; display: flex; }
+
 .input-wrapper {
   flex-grow: 1;
   display: flex;
@@ -773,7 +574,7 @@
 
 .input-wrapper .material-icons-round {
   color: var(--on-surface-variant);
-  margin-right: 12px;
+  margin-right: 14px;
 }
 
 #search-input {
@@ -782,70 +583,65 @@
   border: none;
   outline: none;
   color: var(--on-surface);
-  font-size: 1.1rem;
-  height: 100%;
+  font-family: var(--font-family);
+  font-size: 1.0625rem;
+  font-weight: 400;
 }
 
-#search-input::placeholder {
-  color: var(--on-surface-variant);
-}
+#search-input::placeholder { color: var(--on-surface-variant); }
 
-.search-container:has(#search-input:focus) {
-  background-color: rgba(50, 47, 46, 0.8);
-}
-/* === END of unchanged styles === */
-
-
-/* EDITED: Updated #suggestions-box for the transition */
+/* Suggestions float below as an M3 menu */
 #suggestions-box {
   list-style: none;
-  padding: 8px 0;
+  padding: 0.5rem;
   margin: 0;
   position: absolute;
   width: 100%;
   left: 0;
-  top: 100%;
-  background: rgba(43, 40, 39, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--outline-variant);
-  border-top: none;
-  border-radius: 0 0 2rem 2rem;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  top: calc(100% + 8px);
+  box-sizing: border-box;
+
+  border-radius: var(--r-xl);
+  background: var(--surface-container-high);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: var(--elev-3);
+
   max-height: 400px;
   overflow-y: auto;
   z-index: 100;
 
-  /* --- NEW styles for the transition --- */
-  /* Start hidden and slightly moved up */
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(-8px) scale(0.98);
+  transform-origin: top center;
   visibility: hidden;
   pointer-events: none;
-  /* Define the transition effect */
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  transition: opacity 0.2s var(--ease-emphasized),
+              transform 0.3s var(--ease-spring),
+              visibility 0.2s;
 }
 
-/* NEW: This class makes the suggestions box visible and animates it into place */
 #suggestions-box.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
   visibility: visible;
   pointer-events: auto;
 }
 
-/* (The #suggestions-box li styles remain the same) */
 #suggestions-box li {
   display: flex;
   align-items: center;
-  padding: 12px 20px;
+  padding: 0.75rem 1rem;
+  border-radius: var(--r-full);
   color: var(--on-surface);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.9375rem;
+  transition: background 0.15s var(--ease-emphasized);
 }
 
 #suggestions-box li:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
 }
 
 #suggestions-box li .material-icons-round {
@@ -853,1162 +649,641 @@
   margin-right: 16px;
   font-size: 20px;
 }
+
 /* =========================================================
-   SETTINGS PANEL (Transparent, blurred backdrop)
+   BUTTONS
+   ========================================================= */
+.m3-icon-button {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--r-full);
+  background: var(--scrim-surface);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: var(--edge);
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  transition: background 0.2s var(--ease-emphasized),
+              color 0.2s var(--ease-emphasized),
+              transform 0.3s var(--ease-spring);
+}
+
+.m3-icon-button:hover {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+.m3-icon-button:active { transform: scale(0.9); }
+
+.m3-icon-button span.material-icons-round {
+  font-size: 22px;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Edit mode is a toggle, so it stays filled while active */
+#edit-shortcuts.active {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+/* Filled / text buttons */
+.m3-button-filled,
+.custom-file-upload,
+.m3-button-text {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0.625rem 1.5rem;
+  border: none;
+  border-radius: var(--r-full);
+  font: var(--font-label);
+  cursor: pointer;
+  transition: background 0.2s var(--ease-emphasized),
+              transform 0.2s var(--ease-spring);
+}
+
+.m3-button-filled {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.m3-button-filled:hover { filter: brightness(1.08); }
+.m3-button-filled:active { transform: scale(0.96); }
+
+.custom-file-upload {
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+}
+
+.custom-file-upload:hover { filter: brightness(1.15); }
+.custom-file-upload:active { transform: scale(0.96); }
+.custom-file-upload input[type="file"] { display: none; }
+
+.m3-button-text {
+  background: transparent;
+  color: var(--primary);
+}
+
+.m3-button-text:hover { background: color-mix(in srgb, var(--primary) 12%, transparent); }
+.m3-button-text:active { transform: scale(0.96); }
+
+.m3-button-text.danger { color: var(--error); }
+.m3-button-text.danger:hover { background: color-mix(in srgb, var(--error) 14%, transparent); }
+
+#remove-bg { align-self: center; }
+
+/* =========================================================
+   SETTINGS — centred dialog
    ========================================================= */
 .settings-panel {
   position: fixed;
-  top: 0;
-  right: -100%;
-  width: 420px;
-  max-width: 95vw;
-  height: 100%;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
 
-  /* Transparent + blur */
-  background: rgba(32, 30, 30, 0.55); /* semi-transparent surface */
-  backdrop-filter: blur(28px) saturate(160%);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  /* A plain scrim, per M3 — and no backdrop-filter, which would otherwise
+     composite a viewport-sized blur on every frame. */
+  background: color-mix(in srgb, var(--neutral-0) 55%, transparent);
 
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px 0 0 24px;
+  opacity: 0;
+  /* `visibility` is what actually takes this out of the paint path while
+     closed; `opacity: 0` alone leaves it live and costing frames. */
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-emphasized), visibility 0.3s;
+}
 
-  box-shadow: -16px 0 40px rgba(0, 0, 0, 0.45);
+.settings-panel.active { opacity: 1; visibility: visible; pointer-events: auto; }
 
-  padding: 2rem 1.5rem;
+.settings-dialog {
+  width: min(560px, 100%);
+  max-height: min(84vh, 780px);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  overflow: hidden;
 
-  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1000;
-  overflow-y: auto;
+  border-radius: var(--r-xxl);
+  background: var(--surface-container-high);
+  box-shadow: var(--elev-3);
+
+  transform: scale(0.88) translateY(16px);
+  opacity: 0;
+  transition: transform 0.45s var(--ease-spring), opacity 0.3s var(--ease-emphasized);
 }
 
-/* Active state: slide in */
-.settings-panel.active {
-  right: 0;
-  animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
+.settings-panel.active .settings-dialog { transform: none; opacity: 1; }
 
-/* Scrollbar (minimal, Pixel-like) */
-.settings-panel::-webkit-scrollbar { width: 6px; }
-.settings-panel::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
-  border-radius: 3px;
-}
-.settings-panel::-webkit-scrollbar-track { background: transparent; }
-
-/* Slide-in animation */
-@keyframes slideIn {
-  from { transform: translateX(100%) scale(0.98); opacity: 0; }
-  to { transform: translateX(0) scale(1); opacity: 1; }
-}
-
-
-/* =========================================================
-   HEADER
-   ========================================================= */
 .settings-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--outline-variant);
+  gap: 1rem;
+  padding: 1.5rem 1.5rem 1rem;
+  flex-shrink: 0;
 }
 
-.settings-header h2 {
-  font: var(--font-title);
-  font-size: 1.3rem;
+.settings-header h3 {
+  font-size: 1.5rem;
   font-weight: 600;
-  margin: 0;
+  letter-spacing: -0.01em;
   color: var(--on-surface);
 }
 
-/* Close button tweaks */
 .settings-header .m3-icon-button {
-  background: var(--surface-container-high);
-  color: var(--on-surface-variant);
-  border: none;
-}
-.settings-header .m3-icon-button:hover {
-  background: var(--surface-container-highest);
-  color: var(--primary);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
-/* =========================================================
-   SECTIONS
-   ========================================================= */
-.settings-section {
-  background: var(--surface-container-low);
-  border-radius: 1.25rem;
-  padding: 1.25rem 1.25rem;
+.settings-body {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  transition: background 0.25s ease, transform 0.25s ease;
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem;
+  overflow-y: auto;
 }
-.settings-section:hover {
+
+.settings-section {
   background: var(--surface-container);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  border-radius: var(--r-l);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  transition: background 0.25s var(--ease-emphasized);
 }
+
+.settings-section:hover { background: var(--surface-container-highest); }
 
 /* Section titles */
-.settings-section h3,
-.settings-section label {
-  font-size: 0.85rem;
+.settings-section > label {
+  font-size: 0.9375rem;
   font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--on-surface);
+}
+
+.muted {
   color: var(--on-surface-variant);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 0.8125rem;
 }
 
-/* Add divider between sections */
-.settings-section + .settings-section {
-  border-top: 1px solid rgba(255,255,255,0.05);
-  padding-top: 1.5rem;
+/* Sliders (shortcut layout) */
+.slider-row {
+  display: grid;
+  grid-template-columns: 84px 1fr 2ch;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-/* =========================================================
-   TACTILE INTERACTIONS
-   ========================================================= */
-/* Smooth scale-in for entire panel */
-@keyframes slideIn {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+.slider-row > span {
+  font-size: 0.8125rem;
+  color: var(--on-surface-variant);
 }
-.settings-panel.active { animation: slideIn 0.35s cubic-bezier(0.4,0,0.2,1); }
 
+.slider-row output {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
 
-/* Color Swatches */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: var(--r-full);
+  background: var(--surface-container-highest);
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: var(--elev-1);
+  border: none;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: var(--elev-1);
+}
+
+/* Swatches */
 .color-swatches {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
+  gap: 0.625rem;
 }
 
-/* Round Pixel-style swatches */
 .swatch {
   position: relative;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--surface-container-high);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--r-full);
+  background: var(--swatch);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  border: none;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  /* The ring keeps the black swatch visible against the dark dialog */
+  box-shadow: var(--elev-1), inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  transition: transform 0.3s var(--ease-spring);
 }
 
-/* Inner circle = actual color preview */
-.swatch::before {
-  content: "";
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--swatch); /* set via inline style */
-  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.2);
-}
+.swatch::before { content: none; }
+.swatch:hover { transform: scale(1.12); }
 
-/* Hover interaction */
-.swatch:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-}
+/* The dark swatch needs a light checkmark */
+.swatch[data-theme="black"] { --check-color: #F2F2F5; }
+.swatch:active { transform: scale(0.94); }
 
-/* Selected swatch highlight (check mark) */
+/* Selected = M3 checkmark inside the swatch */
+
 .swatch.selected::after {
-  content: "✓";
+  content: "check";
+  font-family: "Material Icons Round";
+  font-size: 22px;
+  color: var(--check-color, var(--neutral-10));
+  position: static;
+  width: auto;
+  height: auto;
+  background: none;
+  box-shadow: none;
+  animation: pop 0.4s var(--ease-spring);
+}
+
+/* Wallpaper picker */
+.bg-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.bg-preset {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background-size: cover;
+  background-position: center;
+  border: none;
+  border-radius: var(--r-s);
+  padding: 0;
+  cursor: pointer;
+  box-shadow: var(--elev-1);
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.bg-preset:hover { transform: scale(1.06); z-index: 1; }
+.bg-preset:active { transform: scale(0.95); }
+
+.bg-preset.active {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.bg-preset.active::after {
+  content: "check";
+  font-family: "Material Icons Round";
   position: absolute;
-  bottom: 6px;
-  right: 6px;
+  right: 4px;
+  bottom: 4px;
   width: 20px;
   height: 20px;
   border-radius: 50%;
   background: var(--primary);
   color: var(--on-primary);
-  font-size: 0.9rem;
-  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  font-size: 14px;
+  box-shadow: var(--elev-1);
 }
 
-
-
-/* Background Controls / Upload Area */
+/* Drop zone */
 .background-controls {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  padding: 2rem 1.5rem;
-  border-radius: 1.5rem;
+  gap: 0.875rem;
+  padding: 1.5rem 1rem;
+  border-radius: var(--r-m);
   border: 2px dashed var(--outline-variant);
   background: var(--surface-container-low);
-  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.3s ease;
   cursor: pointer;
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  transition: border-color 0.25s var(--ease-emphasized),
+              background 0.25s var(--ease-emphasized);
 }
 
-/* Hover + Drag Over */
 .background-controls:hover,
 .background-controls.dragover {
   border-color: var(--primary);
-  background: var(--surface-container-high);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  background: var(--surface-container-highest);
 }
 
-/* Custom File Upload Button */
-.custom-file-upload {
-  padding: 0.75rem 1.4rem;
-  border-radius: 2rem;
-  background: var(--secondary-container);
-  color: var(--on-secondary-container);
-  font: var(--font-label);
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  cursor: pointer;
-  border: none;
-  transition: background 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+#bg-empty-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--on-surface-variant);
+  pointer-events: none;
+  text-align: center;
 }
 
-.custom-file-upload:hover {
-  background: var(--secondary);
-  color: var(--on-secondary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
+#bg-empty-icon .material-icons-round { font-size: 32px; }
+#bg-empty-icon p { font-size: 0.8125rem; }
 
-.custom-file-upload input[type="file"] {
-  display: none;
-}
-
-/* Preview Container */
 #bg-preview {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: var(--surface-container-high);
-  padding: 0.6rem 1rem;
-  border-radius: 1rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  background: var(--surface-container-highest);
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--r-full);
 }
 
-#bg-preview.hidden {
-  display: none;
-}
+#bg-preview.hidden { display: none; }
 
 #bg-thumb {
-  width: 52px;
-  height: 52px;
+  width: 40px;
+  height: 40px;
   object-fit: cover;
-  border-radius: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border-radius: var(--r-xs);
 }
 
 #bg-name {
-  font: var(--font-body);
-  color: var(--on-surface);
-  max-width: 160px;
+  font-size: 0.8125rem;
+  color: var(--on-surface-variant);
+  max-width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Remove Background Button */
-#remove-bg {
-  margin-top: 0.75rem;
-  padding: 0.6rem 1.4rem;
-  border-radius: 2rem;
-  background: var(--primary);
-  color: var(--on-primary);
-  border: none;
-  cursor: pointer;
-  font: var(--font-label);
-  font-weight: 500;
-  transition: filter 0.2s ease, transform 0.15s ease, box-shadow 0.25s ease;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-
-#remove-bg:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-#remove-bg:active {
-  transform: translateY(0) scale(0.95);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-
-/* Empty state icon */
-#bg-empty-icon {
+/* API key field */
+.api-inputs {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--on-surface-variant);
-  opacity: 0.7;
-  pointer-events: none; /* let clicks go through to file input */
-  text-align: center;
+  gap: 0.75rem;
 }
 
-#bg-empty-icon .material-icons-round {
-  font-size: 48px;
+.api-inputs .field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
   color: var(--on-surface-variant);
 }
 
-#bg-empty-icon p {
+.api-inputs input,
+.editor-row input[type="text"],
+.editor-row input[type="url"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.875rem 1rem;
+  border-radius: var(--r-m);
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container-lowest);
   font: var(--font-body);
-  font-size: 0.9rem;
-}
-
-
-  /* Optional: Scroll if content overflows */
-  .settings-panel {
-    overflow-y: auto;
-  }
-
-  /* Subtle divider between sections */
-  .settings-section + .settings-section {
-    border-top: 1px solid rgba(255,255,255,0.05);
-    padding-top: 1.5rem;
-  }
-
-  /* Make swatches feel tactile like Pixel UI */
-  .swatch {
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), 0 1px 3px rgba(0,0,0,0.2);
-  }
-
-  /* Scrollbar for panel (Pixel-style) */
-  .settings-panel::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .settings-panel::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.1);
-    border-radius: 3px;
-  }
-
-  .settings-panel::-webkit-scrollbar-track {
-    background: transparent;
-  }
-    /* M3-style settings button */
-  #m3-settings-btn,
-  #m3-settings-btn span,
-  .m3-icon-button {
-    /* Base button */
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: var(--secondary-container);
-    color: var(--on-secondary-container);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-
-    /* Elevation / shadow */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.15);
-
-    transition: box-shadow 0.2s ease, transform 0.15s ease, background 0.2s ease;
-  }
-
-  /* Hover state */
-  .m3-icon-button:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.25), 0 8px 16px rgba(0,0,0,0.2);
-    transform: translateY(-2px);
-    background: var(--secondary-container);
-  }
-
-  /* Press / active state */
-  .m3-icon-button:active {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    transform: scale(0.95);
-  }
-
-  /* Icon scaling on press */
-  .m3-icon-button span.material-icons-round {
-    font-size: 28px;
-    user-select: none;
-    pointer-events: none;
-    transition: transform 0.15s ease;
-  }
-
-  .m3-icon-button:active span.material-icons-round {
-    transform: scale(0.85);
-  }
-/* Shortcuts header with edit button */
-.shortcuts-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Dragging style */
-.m3-button.dragging {
-  opacity: 0.5;
-}
-
-/* Edit mode highlight */
-#edit-shortcuts.active {
-  color: var(--primary);
-}
-/* Shortcuts header */
-.shortcuts-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: .5rem;
-}
-
-/* Edit mode affordances */
-.m3-button.editing {
-  border: 2px dashed var(--primary);
-  cursor: grab;
-}
-
-.m3-button.editing:active {
-  cursor: grabbing; /* Cursor for when you're actively dragging */
-}
-#edit-shortcuts.active { 
-  outline: 2px solid var(--primary); 
-}
-
-.shortcuts .m3-button {
-  transition: transform 0.2s ease-in-out, 
-              box-shadow 0.2s ease-in-out,
-              opacity 0.2s ease-in-out; /* Animates movement, shadow, and opacity */
-  user-select: none; /* Prevents text selection while dragging */
-}
-
-/* Dragging ghost style */
-.m3-button.dragging {
-  opacity: 0.4;
-  transform: scale(1.08) rotate(2deg); /* "Lifts" the item off the page */
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3); /* Adds a pronounced shadow */
-  cursor: grabbing;
-}
-
-/* Placeholder for the drop location */
-.placeholder {
-  height: 64px; /* Match the height of your shortcuts */
-  border-radius: 1.5rem;
-  background-color: rgba(128, 128, 128, 0.2); /* A subtle fill is better than a harsh border */
-  
-  /* Animate its appearance */
-  transition: all 0.2s ease;
-  flex-shrink: 0; /* Prevents the placeholder from shrinking in the flex layout */
-  margin: 4px 0; /* Adjust to match the margin of your shortcuts */
-}
-
-/* Modal */
-.editor-modal {
-  position: fixed; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(0,0,0,.4);
-  z-index: 3000;
-}
-.editor-modal.hidden { display: none; }
-.editor-content {
-  width: min(520px, 92vw);
-  background: var(--surface-container);
   color: var(--on-surface);
-  border-radius: 1.25rem;
-  padding: 1rem 1.25rem 1.25rem;
-  box-shadow: 0 12px 40px rgba(0,0,0,.4);
+  transition: border-color 0.2s var(--ease-emphasized), background 0.2s var(--ease-emphasized);
+}
+
+.api-inputs input::placeholder,
+.editor-row input::placeholder { color: var(--on-surface-variant); opacity: 0.7; }
+
+.api-inputs input:focus,
+.editor-row input:focus {
+  outline: none;
+  border-color: var(--primary);
+  border-width: 2px;
+  padding: calc(0.875rem - 1px) calc(1rem - 1px);
+  background: var(--surface-container-low);
+}
+
+.api-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.api-buttons.centered { justify-content: center; }
+
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  padding: 0.25rem 0.5rem;
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  border-radius: var(--r-xs);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+/* =========================================================
+   DIALOGS
+   ========================================================= */
+.editor-modal,
+#shortcuts-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  background: color-mix(in srgb, var(--neutral-0) 55%, transparent);
+}
+
+.editor-modal.hidden { display: none; }
+
+#shortcuts-modal {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-emphasized), visibility 0.3s;
+}
+
+#shortcuts-modal.active { opacity: 1; visibility: visible; pointer-events: auto; }
+
+.editor-content,
+#shortcuts-modal .modal-content {
+  width: min(480px, 100%);
+  box-sizing: border-box;
+  padding: 1.75rem;
+  border-radius: var(--r-xxl);
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+  box-shadow: var(--elev-3);
+}
+
+.editor-content { animation: dialog-in 0.45s var(--ease-spring); }
+
+#shortcuts-modal .modal-content {
+  transform: scale(0.88) translateY(16px);
+  opacity: 0;
+  transition: transform 0.45s var(--ease-spring), opacity 0.3s var(--ease-emphasized);
+}
+
+#shortcuts-modal.active .modal-content { transform: none; opacity: 1; }
+
+@keyframes dialog-in {
+  from { transform: scale(0.88) translateY(16px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+.editor-content h3,
+#shortcuts-modal .modal-content h3 {
+  margin-bottom: 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .editor-row {
   display: grid;
-  grid-template-columns: 90px 1fr;
+  grid-template-columns: 70px 1fr;
   align-items: center;
-  gap: .75rem;
-  margin: .75rem 0;
+  gap: 0.75rem;
+  margin: 0.875rem 0;
 }
 
-.editor-row input[type="text"],
-.editor-row input[type="url"] {
-  background: var(--surface-container-low);
-  border: 1px solid var(--outline);
-  color: var(--on-surface);
-  padding: .6rem .8rem;
-  border-radius: .75rem;
+.editor-row > span {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--on-surface-variant);
 }
 
-.icon-edit {
-  display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+.icon-edit { display: flex; align-items: center; gap: 0.625rem; flex-wrap: wrap; }
+.icon-edit input[type="url"] { flex: 1; min-width: 140px; }
+
+/* Same circle as a real shortcut, so the preview shows what you'll get */
+#edit-preview {
+  width: 46px;
+  height: 46px;
+  padding: 9px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  box-shadow: var(--elev-1);
 }
-#edit-preview { width: 40px; height: 40px; object-fit: contain; }
 
 .editor-actions {
-  margin-top: 1rem;
-  display: flex; gap: .5rem; justify-content: flex-end;
-}
-#edit-shortcuts {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0, 0, 0, 0.3);
-  color: white;
-  font-size: 20px;
-  cursor: pointer;  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, transform 0.2s, opacity 0.2s;
-  opacity: 0.6; /* less visible by default */
-  z-index: 9999;
-}
-
-#edit-shortcuts:hover {
-  background: rgba(0, 0, 0, 0.7);
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-#edit-shortcuts.active {
-  background: #ffffffbb; /* highlight when edit mode is ON */
-  opacity: 1;
-}
-#weather-top,
-#btc-bottom {
-  /* This is the key property. It tells both sections to grow and share the empty space equally. */
-  flex-grow: 1;
-}
-
-/* API Keys section */
-.api-section h3 {
-  margin-bottom: 1rem;
-  font-size: 1.125rem; /* M3 Headline Small */
-  font-weight: 500;
-  color: var(--on-surface);
-  text-transform: uppercase;
-  letter-spacing: 0.75px;
-}
-
-/* Input wrapper */
-.api-inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-}
-
-/* Labels */
-.api-inputs label {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.875rem; /* M3 Body Small */
-  font-weight: 500;
-  color: var(--on-surface-variant);
-  gap: 0.25rem;
-}
-
-/* Pixel-style filled inputs */
-.api-inputs input {
-  padding: 0.9rem 1rem;
-  border-radius: 1rem;
-  border: 1px solid var(--outline-variant);
-  background: var(--surface-container-high);
-  font-size: 0.95rem;
-  color: var(--on-surface);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
-}
-
-.api-inputs input::placeholder {
-  color: var(--on-surface-variant);
-  opacity: 0.8;
-}
-
-.api-inputs input:focus {
-  outline: none;
-  border-color: var(--primary);
-  background: var(--surface-container);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 30%, transparent);
-  transform: translateY(-1px);
-}
-
-/* Buttons container */
-.api-buttons {
+  margin-top: 1.5rem;
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.5rem;
-  padding-bottom: 1rem;
+  justify-content: flex-end;
 }
 
-/* Unified Pixel-style buttons (SAVE, RESET, Remove BG, Choose File) */
-.custom-file-upload,
-.api-buttons .m3-button,
-#remove-bg {
-  border-radius: 2rem;
-  padding: 0.8rem 1.4rem;
-  background: var(--secondary-container);
-  color: var(--on-secondary-container);
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  border: 1px solid var(--outline-variant);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  transition: background 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+/* Save is the primary action */
+#editor-save {
+  background: var(--primary);
+  color: var(--on-primary);
 }
 
-/* Hover */
-.custom-file-upload:hover,
-.api-buttons .m3-button:hover,
-#remove-bg:hover {
-  background: var(--secondary);
-  color: var(--on-secondary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
+#editor-save:hover { background: var(--primary); filter: brightness(1.08); }
 
-/* Active */
-.custom-file-upload:active,
-.api-buttons .m3-button:active,
-#remove-bg:active {
-  background: var(--secondary-container-highest);
-  color: var(--on-secondary-container);
-  transform: scale(0.97);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-/* Danger variant for RESET */
-.api-buttons .m3-button.danger {
-  background: var(--error);
-  color: var(--on-error);
-  border: none;
-}
-
-.api-buttons .m3-button.danger:hover {
-  background: color-mix(in srgb, var(--error) 90%, black 10%);
-}
-
-.api-buttons .m3-button.danger:active {
-  background: color-mix(in srgb, var(--error) 80%, black 20%);
-}
-
-
-.custom-file-upload:hover,
-.api-buttons .m3-button:hover,
-#remove-bg:hover {
-  background: var(--secondary);
-  color: var(--on-secondary);
-  transform: translateY(-2px);
-}
-.custom-file-upload {
-  padding: 0.6rem 1.2rem;
-  border-radius: 1rem;
-  background: var(--surface-container-high); /* lighter background */
-  color: var(--on-secondary-container);     /* dark text */
-  font: var(--font-label);
-  cursor: pointer;
-  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  border: 1px solid var(--outline-variant);
-}
-
-.custom-file-upload:hover {
-  background: var(--secondary-container);  /* slightly darker background */
-  color: var(--on-secondary-container);    /* force text to stay dark */
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.custom-file-upload:active {
-  background: var(--secondary);            /* even darker for pressed */
-  color: var(--on-secondary);              /* adjust to still be readable */
-  transform: scale(0.97);
-}
-
-.custom-file-upload input[type="file"] {
-  display: none;
-}
-
-/* Creator credit - top left */
-#site-credit {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  font-size: 0.9rem;
-  font-weight: 500;
+#editor-cancel {
+  background: var(--surface-container-highest);
   color: var(--on-surface-variant);
-  text-decoration: none;
-  letter-spacing: 0.03em;
-  z-index: 1100;
-  transition: color 0.25s ease;
 }
 
-#site-credit:hover {
-  color: var(--primary);
-  text-decoration: underline;
-}
-/* Ripple effect container */
-.m3-button,
-.m3-icon-button,
-.custom-file-upload,
-.api-buttons .m3-button,
-#remove-bg {
-  position: relative;
-  overflow: hidden; /* clip ripple inside */
-}
-
-/* Softer Pixel-style ripple */
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  transform: scale(0);
-  background: currentColor;
-  opacity: 0.2; /* softer opacity */
-  filter: blur(4px); /* adds softness */
-  pointer-events: none;
-  animation: ripple-animation 700ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes ripple-animation {
-  to {
-    transform: scale(6); /* larger, more diffused */
-    opacity: 0;
-  }
-}
-
-
-/* ============================
-   Shortcuts Modal (Material You style)
-   ============================ */
-#shortcuts-modal {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 3000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-#shortcuts-modal.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-#shortcuts-modal .modal-content {
-  background: var(--surface-container);
-  color: var(--on-surface);
-  border-radius: 1.25rem;
-  padding: 1.5rem 1.75rem;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-  width: min(480px, 92vw);
-
-  /* Animation */
-  transform: scale(0.9) translateY(20px);
-  opacity: 0;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.3s ease;
-}
-
-#shortcuts-modal.active .modal-content {
-  transform: scale(1) translateY(0);
-  opacity: 1;
-}
-
-/* Header */
-#shortcuts-modal .modal-content h3 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font: var(--font-headline);
-  color: var(--on-surface);
-  text-align: center;
-}
-
-/* List of shortcuts */
 #shortcuts-modal ul {
   list-style: none;
   padding: 0;
-  margin: 1rem 0 1.5rem;
+  margin: 0 0 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.375rem;
 }
 
 #shortcuts-modal li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--surface-container-low);
-  padding: 0.6rem 0.9rem;
-  border-radius: 0.75rem;
-  font-size: 0.95rem;
-  color: var(--on-surface);
-  transition: background 0.2s ease;
-}
-
-#shortcuts-modal li:hover {
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--r-m);
   background: var(--surface-container);
-}
-
-/* Keyboard keys */
-#shortcuts-modal kbd {
-  background: var(--secondary-container);
-  color: var(--on-secondary-container);
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.4rem;
-  font-family: monospace;
-  font-size: 0.85rem;
-  font-weight: 500;
-  min-width: 2rem;
-  text-align: center;
-}
-
-/* Close button */
-#close-shortcuts {
-  display: block;
-  margin: 0 auto;
-  padding: 0.6rem 1.4rem;
-  border-radius: 1rem;
-  background: var(--primary);
-  color: var(--on-primary);
-  border: none;
-  cursor: pointer;
-  font: var(--font-label);
-  transition: filter 0.2s, transform 0.15s, box-shadow 0.25s;
-}
-
-#close-shortcuts:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-#close-shortcuts:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-/* Centered buttons in settings blocks */
-.api-buttons.centered {
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-/* Keyboard shortcut hint style */
-.settings-section kbd {
-  background: var(--surface-container-high);
+  font-size: 0.9375rem;
   color: var(--on-surface);
-  padding: 0.2rem 0.5rem;
-  border-radius: 0.3rem;
-  font-family: monospace;
-  font-size: 0.85rem;
-}
-/* === SMOOTH DRAG & DROP FOR SHORTCUTS === */
-
-/* This is the key part: animate the shortcuts when their position changes */
-.shortcuts a {
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background 0.2s var(--ease-emphasized);
 }
 
-/* Style for the icon currently being dragged */
-.shortcuts a.dragging {
-  /* Make it semi-transparent and lift it up slightly */
-  opacity: 0.5;
-  transform: scale(1.1);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-}
+#shortcuts-modal li:hover { background: var(--surface-container-highest); }
 
-/* While an item is being dragged, the other items are NOT the one being dragged */
-/* This makes sure the browser doesn't show the "ghost" of the original item */
-.shortcuts a.editing:not(.dragging) {
-  /* You can add styles here for how the other icons should look */
-  /* For example, a slight dimming effect: */
-  /* opacity: 0.8; */
-}
+#close-shortcuts { display: flex; margin: 0 auto; min-width: 120px; }
 
 /* =========================================================
-   UPDATED MOBILE RESPONSIVE STYLES
-   (Hides To-Do List & Fixes Settings Panel)
+   RESPONSIVE
    ========================================================= */
 @media screen and (max-width: 768px) {
+  body { padding: 1.5rem 1rem; }
 
-  /* --- 1. General Layout & Typography --- */
-  body {
-    padding: 1rem;
-    justify-content: flex-start;
-    min-height: 100vh;
-    height: auto;
-  }
+  .dashboard { gap: 2rem; }
 
-  .grid-container {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .card {
-    padding: 1.25rem;
-  }
+  #time { font-size: clamp(3.5rem, 20vw, 5.5rem); }
+  #greeting { font-size: 0.875rem; }
 
-  /* --- 2. Header & Search --- */
-  header {
-    margin-bottom: 1.5rem;
-  }
-  
-  #time {
-    font-size: 3rem;
-  }
+  .glance-line { font-size: 0.875rem; gap: 0.375rem; }
+  #weather-icon { width: 28px; height: 28px; }
+  #temp { font-size: 1rem; }
 
-  #greeting {
-    font-size: 1.25rem;
-  }
-  
-  .search-container {
-    padding: 0.5rem 1rem;
-    border-radius: 1.5rem;
-  }
-  
-  #search-input {
-    font-size: 1rem;
-  }
+  /* The grid already shrinks fluidly; just keep the logo glyph in proportion */
+  .shortcut-icon { width: 46%; height: auto; }
 
-  /* --- 3. Shortcuts Card --- */
-  .shortcuts {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-  }
+  .search-container { padding: 0.75rem 1.25rem; }
+  #search-input { font-size: 1rem; }
 
-  /* Only show the first two shortcuts */
-  .shortcuts a {
-    display: none;
-  }
-  .shortcuts a:nth-child(1),
-  .shortcuts a:nth-child(2) {
-    display: flex;
-  }
-
-  .m3-button {
-    padding: 0.75rem 0.5rem;
-    border-radius: 1.25rem;
-  }
-  
-  .shortcut-icon {
-    width: 28px;
-    height: 28px;
-  }
-  
-  .m3-button .shortcut-name {
-    font-size: 0.8rem;
-  }
-  
-  /* --- 4. To-Do List Card (FIX) --- */
-  /* As requested: Hide the to-do list entirely on mobile to prevent scrolling */
-  .todo-card {
-    display: none;
-  }
-
-  /* --- 5. Weather & BTC Card --- */
-  #weather-top {
-    padding: 1rem;
-    gap: 0.25rem;
-  }
-
-  #btc-bottom {
-    padding: 0.9rem 1.25rem;
-  }
-  
-  #weather-main img {
-    width: 48px;
-    height: 48px;
-  }
-  
-  #temp {
-    font-size: 2.75rem;
-  }
-  
-  #description {
-    font-size: 0.9rem;
-  }
-  
-  .btc-price-value {
-    font-size: 1rem;
-  }
-  
-  .btc-title {
-    font-size: 0.9rem;
-  }
-  
-  .btc-chip {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.4rem;
-  }
-
-  /* --- 6. Settings Panel (FIX) --- */
-  /* Make the settings panel full-screen and fix overflow */
-  .settings-panel {
-    width: 100%;
-    max-width: 100vw;
-    border-left: none;
-    border-radius: 0;
-    /* This new line prevents padding from making the panel wider than the screen */
-    box-sizing: border-box; 
-  }
-}
-.settings-panel {
-  position: fixed;
-  top: 0;
-  right: 0; /* Anchor the panel to the right edge of the screen */
-  width: 420px;
-  max-width: 95vw;
-  height: 100%;
-  background: rgba(32, 30, 30, 0.55);
-  backdrop-filter: blur(28px) saturate(160%);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: -16px 0 40px rgba(0, 0, 0, 0.45);
-  padding: 2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  z-index: 1000;
-  overflow-y: auto;
-  
-  /* Use transform to move the panel off-screen */
-  transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  .settings-panel, .editor-modal, #shortcuts-modal { padding: 0.75rem; }
+  .settings-dialog { max-height: 90vh; }
+  .settings-header { padding: 1.25rem 1.25rem 0.75rem; }
+  .settings-body { padding: 0 1.25rem 1.25rem; }
+  .bg-presets-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* Active state: slide it back into view */
-.settings-panel.active {
-  transform: translateX(0);
-}
-
-/* You can now safely remove the old @keyframes slideIn animation rule if you want, as the transition handles everything. */
-
-
-/* =========================================================
-   FIX: Mobile Shortcut Layout (Only 2 Visible)
-   ========================================================= */
-
-@media screen and (max-width: 768px) {
-  /* This code hides all shortcuts by default on mobile... */
-  .shortcuts a {
-    display: none;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-  
-  /* ...and then specifically shows only the first two. */
-  .shortcuts a:nth-child(1),
-  .shortcuts a:nth-child(2) {
-    display: flex; /* Use 'flex' to match the button's original display type */
-  }
-}
-/* =========================================================
-   BACKGROUND PRESETS
-   ========================================================= */
-.bg-presets-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 per row */
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.bg-preset {
-  aspect-ratio: 16 / 9; /* Wide shape like a screen */
-  background-size: cover;
-  background-position: center;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease;
-  padding: 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.bg-preset:hover {
-  transform: scale(1.05);
-  border-color: var(--on-surface-variant);
-  z-index: 1;
-}
-
-.bg-preset:active {
-  transform: scale(0.95);
-}
-
-/* Optional: Outline the active preset if you want to add JS for it */
-.bg-preset.active {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px var(--primary-container);
-}
-
-/* =========================================================
-   BACKGROUND PRESETS
-   ========================================================= */
-.bg-presets-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 per row */
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.bg-preset {
-  aspect-ratio: 16 / 9; /* Wide shape like a screen */
-  background-size: cover;
-  background-position: center;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease;
-  padding: 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.bg-preset:hover {
-  transform: scale(1.05);
-  border-color: var(--on-surface-variant);
-  z-index: 1;
-}
-
-.bg-preset:active {
-  transform: scale(0.95);
-}
-
-/* Optional: Outline the active preset if you want to add JS for it */
-.bg-preset.active {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px var(--primary-container);
-}
-/* Optional: Center checkmark when active */
-.bg-preset.active::after {
-  content: "check";
-  font-family: "Material Icons Round";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--primary);
-  color: var(--on-primary);
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
